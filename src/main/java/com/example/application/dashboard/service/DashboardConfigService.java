@@ -4,6 +4,7 @@ import com.example.application.dashboard.domain.DashboardTile;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.hilla.BrowserCallable;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,62 +27,59 @@ public class DashboardConfigService {
     private static final Logger log = LoggerFactory.getLogger(DashboardConfigService.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final String configFile = "dashboard-config.json";
+    private List<DashboardTile> cachedTiles;
+
+    @PostConstruct
+    private void loadConfiguration() {
+        try {
+            ClassPathResource resource = new ClassPathResource(configFile);
+            cachedTiles = objectMapper.readValue(resource.getInputStream(), 
+                new TypeReference<List<DashboardTile>>() {});
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load dashboard configuration", e);
+        }
+    }
+
     public List<DashboardTile> getAllTiles() {
         return getTilesForDashboard();
     }
     
     public List<DashboardTile> getTilesForDashboard() {
-        try {
-            ClassPathResource resource = new ClassPathResource(configFile);
-            List<DashboardTile> tiles = objectMapper.readValue(resource.getInputStream(), 
-                new TypeReference<List<DashboardTile>>() {});
+        boolean isAdmin = isCurrentUserAdmin();
+        log.debug("Dashboard tiles - isAdmin: {}", isAdmin);
+        
+        List<DashboardTile> result = cachedTiles.stream()
+            .filter(DashboardTile::isEnabled)
+            .filter(DashboardTile::isShowInDashboard)
+            .filter(tile -> {
+                boolean allowed = !tile.isAdminOnly() || isAdmin;
+                log.debug("Tile: {}, adminOnly: {}, allowed: {}", tile.getTitle(), tile.isAdminOnly(), allowed);
+                return allowed;
+            })
+            .sorted((a, b) -> Integer.compare(a.getOrder(), b.getOrder()))
+            .collect(Collectors.toList());
             
-            boolean isAdmin = isCurrentUserAdmin();
-            log.debug("Dashboard tiles - isAdmin: {}", isAdmin);
-            
-            List<DashboardTile> result = tiles.stream()
-                .filter(DashboardTile::isEnabled)
-                .filter(DashboardTile::isShowInDashboard)
-                .filter(tile -> {
-                    boolean allowed = !tile.isAdminOnly() || isAdmin;
-                    log.debug("Tile: {}, adminOnly: {}, allowed: {}", tile.getTitle(), tile.isAdminOnly(), allowed);
-                    return allowed;
-                })
-                .sorted((a, b) -> Integer.compare(a.getOrder(), b.getOrder()))
-                .collect(Collectors.toList());
-                
-            log.debug("Returning {} dashboard tiles", result.size());
-            return result;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load dashboard configuration", e);
-        }
+        log.debug("Returning {} dashboard tiles", result.size());
+        return result;
     }
     
     public List<DashboardTile> getTilesForMenu() {
-        try {
-            ClassPathResource resource = new ClassPathResource(configFile);
-            List<DashboardTile> tiles = objectMapper.readValue(resource.getInputStream(), 
-                new TypeReference<List<DashboardTile>>() {});
+        boolean isAdmin = isCurrentUserAdmin();
+        log.debug("Menu tiles - isAdmin: {}", isAdmin);
+        
+        List<DashboardTile> result = cachedTiles.stream()
+            .filter(DashboardTile::isEnabled)
+            .filter(DashboardTile::isShowInMenu)
+            .filter(tile -> {
+                boolean allowed = !tile.isAdminOnly() || isAdmin;
+                log.debug("Menu Tile: {}, adminOnly: {}, allowed: {}", tile.getTitle(), tile.isAdminOnly(), allowed);
+                return allowed;
+            })
+            .sorted((a, b) -> Integer.compare(a.getOrder(), b.getOrder()))
+            .collect(Collectors.toList());
             
-            boolean isAdmin = isCurrentUserAdmin();
-            log.debug("Menu tiles - isAdmin: {}", isAdmin);
-            
-            List<DashboardTile> result = tiles.stream()
-                .filter(DashboardTile::isEnabled)
-                .filter(DashboardTile::isShowInMenu)
-                .filter(tile -> {
-                    boolean allowed = !tile.isAdminOnly() || isAdmin;
-                    log.debug("Menu Tile: {}, adminOnly: {}, allowed: {}", tile.getTitle(), tile.isAdminOnly(), allowed);
-                    return allowed;
-                })
-                .sorted((a, b) -> Integer.compare(a.getOrder(), b.getOrder()))
-                .collect(Collectors.toList());
-                
-            log.debug("Returning {} menu tiles", result.size());
-            return result;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load menu configuration", e);
-        }
+        log.debug("Returning {} menu tiles", result.size());
+        return result;
     }
     
     private boolean isCurrentUserAdmin() {
@@ -97,13 +95,7 @@ public class DashboardConfigService {
 
     @RolesAllowed("ADMIN")
     public List<DashboardTile> getAllTilesForAdmin() {
-        try {
-            ClassPathResource resource = new ClassPathResource(configFile);
-            return objectMapper.readValue(resource.getInputStream(), 
-                new TypeReference<List<DashboardTile>>() {});
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load dashboard configuration", e);
-        }
+        return cachedTiles;
     }
 
     @RolesAllowed("ADMIN")

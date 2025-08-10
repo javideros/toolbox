@@ -8,12 +8,19 @@ import org.springframework.data.util.ProxyUtils;
 @MappedSuperclass
 public abstract class AbstractEntity<ID> {
 
+    private transient int cachedHashCode;
+
     @JsonIgnore
     public abstract @Nullable ID getId();
 
     @Override
     public String toString() {
-        return "%s{id=%s}".formatted(getClass().getSimpleName(), getId());
+        try {
+            var id = getId();
+            return "%s{id=%s}".formatted(getClass().getSimpleName(), id != null ? id : "<null>");
+        } catch (Exception e) {
+            return "Entity{id=<error>}";
+        }
     }
 
     @Override
@@ -22,31 +29,24 @@ public abstract class AbstractEntity<ID> {
         // this we can't use getId() to calculate the hashcode. Unless you have sets
         // with lots of entities in them, returning the same hashcode should not be a
         // problem.
-        return ProxyUtils.getUserClass(getClass()).hashCode();
+        if (cachedHashCode == 0) {
+            cachedHashCode = ProxyUtils.getUserClass(getClass()).hashCode();
+        }
+        return cachedHashCode;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || obj == this) {
-            return obj == this;
-        }
-
-        if (!isSameClass(obj)) {
-            return false;
-        }
-
-        if (!(obj instanceof AbstractEntity<?> other)) {
-            return false;
-        }
+        if (this == obj) return true;
+        if (!(obj instanceof AbstractEntity<?> other)) return false;
+        
+        // Cache class lookups to avoid redundant ProxyUtils calls
+        var thisClass = ProxyUtils.getUserClass(getClass());
+        var otherClass = ProxyUtils.getUserClass(other.getClass());
+        if (!thisClass.equals(otherClass)) return false;
         
         var id = getId();
         return id != null && id.equals(other.getId());
-    }
-    
-    private boolean isSameClass(Object obj) {
-        var thisUserClass = ProxyUtils.getUserClass(getClass());
-        var otherUserClass = ProxyUtils.getUserClass(obj);
-        return thisUserClass == otherUserClass;
     }
 
 }

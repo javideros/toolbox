@@ -1,15 +1,20 @@
 /**
- * This is a feature package for the Task Management sample feature. Its purpose is to demonstrate how you typically
- * structure Vaadin business applications, and how the different building blocks interact.
+ * Task Management feature package providing comprehensive task handling capabilities.
  * <p>
- * A feature package represents a self-contained unit of functionality, including UI components, business logic, and
- * data access. It could be a subdomain or bounded context (e.g., "Billing"), a specific use case (e.g., "User
- * Registration"), or even a complex UI view (e.g., "Dashboard").
+ * This package contains all components necessary for task management functionality including:
+ * <ul>
+ * <li>{@link com.example.application.taskmanagement.domain} - Domain entities and repositories</li>
+ * <li>{@link com.example.application.taskmanagement.service} - Business logic and services</li>
+ * </ul>
  * </p>
  * <p>
- * If your application is very small, you may not need dedicated feature packages. In that case, move the subpackages
- * directly to the application package.
+ * The task management feature demonstrates proper layered architecture with clear separation
+ * between domain model, business logic, and data access layers. It supports CRUD operations,
+ * validation, and pagination for task entities.
  * </p>
+ * 
+ * @since 1.0
+ * @see com.example.application.taskmanagement.domain.Task
+ * @see com.example.application.taskmanagement.service.TaskService
  */
 package com.example.application.taskmanagement;
-// TODO Remove this package once you have added real features

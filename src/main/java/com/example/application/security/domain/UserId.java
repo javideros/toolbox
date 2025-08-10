@@ -38,7 +38,6 @@ public final class UserId implements Serializable {
     private final String userId;
 
     private UserId(String userId) {
-        // TODO If the userId has a specific format, validate it here.
         this.userId = requireNonNull(userId);
     }
 

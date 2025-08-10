@@ -35,6 +35,15 @@ public class ReferenceTable extends AbstractEntity<Long> {
         this.description = description;
     }
 
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getCode() {
         return code;
     }
@@ -57,14 +66,5 @@ public class ReferenceTable extends AbstractEntity<Long> {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

@@ -88,7 +88,7 @@ public final class SampleUsers {
      * require administrative access.
      * </p>
      */
-    static DevUser ADMIN = DevUser.builder().preferredUsername(ADMIN_USERNAME).fullName("Alice Administrator")
+    public static final DevUser ADMIN = DevUser.builder().preferredUsername(ADMIN_USERNAME).fullName("Alice Administrator")
             .userId(ADMIN_ID).password(SAMPLE_PASSWORD).email("alice@example.com").roles(AppRoles.ADMIN, AppRoles.USER)
             .build();
 
@@ -115,7 +115,7 @@ public final class SampleUsers {
      * access.
      * </p>
      */
-    static final DevUser USER = DevUser.builder().preferredUsername(USER_USERNAME).fullName("Ursula User")
+    public static final DevUser USER = DevUser.builder().preferredUsername(USER_USERNAME).fullName("Ursula User")
             .userId(USER_ID).password(SAMPLE_PASSWORD).email("ursula@example.com").roles(AppRoles.USER).build();
 
     /**
@@ -138,5 +138,5 @@ public final class SampleUsers {
      * <!-- spotless:on -->
      * </p>
      */
-    static final List<DevUser> ALL_USERS = List.of(USER, ADMIN);
+    public static final List<DevUser> ALL_USERS = List.of(USER, ADMIN);
 }

@@ -42,53 +42,65 @@ final class OidcUserAdapter implements OidcUser, AppUserPrincipal {
     }
 
     private static AppUserInfo createAppUserInfo(OidcUser oidcUser) {
-        return new AppUserInfo() {
-            private final UserId userId = UserId.of(oidcUser.getSubject());
-            private final String preferredUsername = requireNonNull(oidcUser.getPreferredUsername());
-            private final String fullName = requireNonNull(oidcUser.getFullName());
-            private final ZoneId zoneId = parseZoneInfo(oidcUser.getZoneInfo());
-            private final Locale locale = parseLocale(oidcUser.getLocale());
+        return new OidcAppUserInfo(oidcUser);
+    }
 
-            @Override
-            public UserId getUserId() {
-                return userId;
-            }
+    private static class OidcAppUserInfo implements AppUserInfo {
+        private final UserId userId;
+        private final String preferredUsername;
+        private final String fullName;
+        private final ZoneId zoneId;
+        private final Locale locale;
+        private final OidcUser oidcUser;
 
-            @Override
-            public String getPreferredUsername() {
-                return preferredUsername;
-            }
+        OidcAppUserInfo(OidcUser oidcUser) {
+            this.oidcUser = oidcUser;
+            this.userId = UserId.of(oidcUser.getSubject());
+            this.preferredUsername = requireNonNull(oidcUser.getPreferredUsername());
+            this.fullName = requireNonNull(oidcUser.getFullName());
+            this.zoneId = parseZoneInfo(oidcUser.getZoneInfo());
+            this.locale = parseLocale(oidcUser.getLocale());
+        }
 
-            @Override
-            public String getFullName() {
-                return fullName;
-            }
+        @Override
+        public UserId getUserId() {
+            return userId;
+        }
 
-            @Override
-            public @Nullable String getProfileUrl() {
-                return oidcUser.getProfile();
-            }
+        @Override
+        public String getPreferredUsername() {
+            return preferredUsername;
+        }
 
-            @Override
-            public @Nullable String getPictureUrl() {
-                return oidcUser.getPicture();
-            }
+        @Override
+        public String getFullName() {
+            return fullName;
+        }
 
-            @Override
-            public @Nullable String getEmail() {
-                return oidcUser.getEmail();
-            }
+        @Override
+        public @Nullable String getProfileUrl() {
+            return oidcUser.getProfile();
+        }
 
-            @Override
-            public ZoneId getZoneId() {
-                return zoneId;
-            }
+        @Override
+        public @Nullable String getPictureUrl() {
+            return oidcUser.getPicture();
+        }
 
-            @Override
-            public Locale getLocale() {
-                return locale;
-            }
-        };
+        @Override
+        public @Nullable String getEmail() {
+            return oidcUser.getEmail();
+        }
+
+        @Override
+        public ZoneId getZoneId() {
+            return zoneId;
+        }
+
+        @Override
+        public Locale getLocale() {
+            return locale;
+        }
     }
 
     /**
