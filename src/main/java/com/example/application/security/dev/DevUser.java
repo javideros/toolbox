@@ -139,7 +139,7 @@ final class DevUser implements AppUserPrincipal, UserDetails {
         private @Nullable String pictureUrl;
         private ZoneId zoneInfo = ZoneId.of("UTC");
         private Locale locale = Locale.getDefault();
-        private List<GrantedAuthority> authorities = Collections.emptyList();
+        private ArrayList<GrantedAuthority> authorities = new ArrayList<>();
         private @Nullable String password;
 
         /**
@@ -249,7 +249,8 @@ final class DevUser implements AppUserPrincipal, UserDetails {
          * @return this builder for method chaining
          */
         public DevUserBuilder roles(String... roles) {
-            this.authorities = new ArrayList<>(roles.length);
+            this.authorities.clear();
+            this.authorities.ensureCapacity(roles.length);
             for (var role : roles) {
                 this.authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
             }
@@ -305,8 +306,17 @@ final class DevUser implements AppUserPrincipal, UserDetails {
             validateRequiredFields();
             setDefaults();
             var encodedPassword = PASSWORD_ENCODER.encode(password);
-            return new DevUser(new DevUserInfo(userId, preferredUsername, fullName, profileUrl, pictureUrl, email,
-                    zoneInfo, locale), authorities, encodedPassword);
+            var userInfo = new DevUserInfo(
+                    userId, 
+                    preferredUsername, 
+                    fullName, 
+                    profileUrl, 
+                    pictureUrl, 
+                    email,
+                    zoneInfo, 
+                    locale
+            );
+            return new DevUser(userInfo, authorities, encodedPassword);
         }
         
         private void validateRequiredFields() {

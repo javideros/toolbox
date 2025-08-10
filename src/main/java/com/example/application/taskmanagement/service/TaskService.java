@@ -2,7 +2,6 @@ package com.example.application.taskmanagement.service;
 
 import com.example.application.taskmanagement.domain.Task;
 import com.example.application.taskmanagement.domain.TaskRepository;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Pageable;

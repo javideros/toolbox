@@ -95,7 +95,9 @@ class DevSecurityConfig {
                 log.warn("╚════════════════════════════════════════════════════════════════════════════════════════╝");
             }
             var routeConfiguration = RouteConfiguration.forApplicationScope();
+            log.debug("Configuring development login route: {}", DevLoginView.LOGIN_PATH);
             routeConfiguration.setRoute(DevLoginView.LOGIN_PATH, DevLoginView.class);
+            log.info("Development login route configured successfully");
         };
     }
 

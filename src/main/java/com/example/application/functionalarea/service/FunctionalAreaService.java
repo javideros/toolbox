@@ -9,6 +9,7 @@ import jakarta.annotation.security.RolesAllowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 class FunctionalAreaValidationException extends RuntimeException {
     public FunctionalAreaValidationException(String message) {
@@ -33,10 +34,16 @@ public class FunctionalAreaService extends CrudRepositoryService<FunctionalArea,
         return repository;
     }
     
+    @Transactional(readOnly = true)
     public java.util.List<FunctionalArea> listAll() {
         java.util.List<FunctionalArea> areas = repository.findAll();
         log.info("Found {} functional areas", areas.size());
         return areas;
+    }
+    
+    @Transactional(readOnly = true)
+    public long count() {
+        return repository.count();
     }
     
     @PostConstruct
@@ -46,6 +53,7 @@ public class FunctionalAreaService extends CrudRepositoryService<FunctionalArea,
     }
 
     @Override
+    @Transactional
     public FunctionalArea save(FunctionalArea entity) {
         if (entity.getId() == null) {
             if (repository.existsByName(entity.getName())) {
