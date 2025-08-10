@@ -78,13 +78,15 @@ public interface AppUserInfo {
     /**
      * Returns the user's full display name.
      * <p>
-     * This typically combines the user's first and last name in a format appropriate for display in the user interface.
-     * If the user has no full name, the preferred username is used instead.
+     * This method should be overridden by implementations to provide meaningful full names when available.
+     * The default implementation falls back to the preferred username when no actual full name is available.
+     * Implementations should attempt to combine first and last names or use display names before falling back.
      * </p>
      *
-     * @return the user's full name (never {@code null})
+     * @return the user's full name, or preferred username as fallback (never {@code null})
      */
     default String getFullName() {
+        // Default fallback - implementations should override with proper name composition
         return getPreferredUsername();
     }
 
@@ -118,12 +120,14 @@ public interface AppUserInfo {
      * Returns the user's email address.
      * <p>
      * This email address is considered the primary contact method for the user and may be used for notifications and
-     * communications.
+     * communications. The default implementation returns {@code null} - concrete implementations should override
+     * this method to provide actual email addresses when available from the user store or identity provider.
      * </p>
      *
-     * @return the user's email address, or {@code null} if not available
+     * @return the user's email address, or {@code null} if not available or not implemented
      */
     default @Nullable String getEmail() {
+        // Default implementation - override in concrete classes to provide actual email addresses
         return null;
     }
 

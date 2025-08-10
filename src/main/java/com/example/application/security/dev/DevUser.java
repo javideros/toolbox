@@ -25,23 +25,7 @@ import static java.util.Objects.requireNonNull;
  * systems.
  * </p>
  * <p>
- * DevUser instances should only be used in development and test environments, not in production. They are typically
- * created through the {@link #builder()} method and customized using the fluent {@link DevUserBuilder} API.
- * </p>
- * <p>
- * Example usage: <!-- spotless:off -->
- * <pre>
- * {@code
- * DevUser adminUser = DevUser.builder()
- *     .preferredUsername("admin")
- *     .fullName("Admin User")
- *     .password("securePassword")
- *     .email("admin@example.com")
- *     .roles("ADMIN")
- *     .build();
- * }
- * </pre>
- * <!-- spotless:on -->
+ * DevUser instances should only be used in development and test environments, not in production.
  * </p>
  *
  * @see DevUserBuilder The builder for creating DevUser instances
@@ -82,6 +66,9 @@ final class DevUser implements AppUserPrincipal, UserDetails {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
         if (obj instanceof DevUser user) {
             return this.appUser.getUserId().equals(user.appUser.getUserId());
         }
@@ -150,7 +137,7 @@ final class DevUser implements AppUserPrincipal, UserDetails {
         private @Nullable String email;
         private @Nullable String profileUrl;
         private @Nullable String pictureUrl;
-        private ZoneId zoneInfo = ZoneId.systemDefault();
+        private ZoneId zoneInfo = ZoneId.of("UTC");
         private Locale locale = Locale.getDefault();
         private List<GrantedAuthority> authorities = Collections.emptyList();
         private @Nullable String password;
@@ -315,21 +302,29 @@ final class DevUser implements AppUserPrincipal, UserDetails {
          *             if the preferred username or password has not been set
          */
         public DevUser build() {
+            validateRequiredFields();
+            setDefaults();
+            var encodedPassword = PASSWORD_ENCODER.encode(password);
+            return new DevUser(new DevUserInfo(userId, preferredUsername, fullName, profileUrl, pictureUrl, email,
+                    zoneInfo, locale), authorities, encodedPassword);
+        }
+        
+        private void validateRequiredFields() {
             if (preferredUsername == null) {
                 throw new IllegalStateException("Preferred username must be set before building the user");
             }
             if (password == null) {
                 throw new IllegalStateException("Password must be set before building the user");
             }
-            var encodedPassword = PASSWORD_ENCODER.encode(password);
+        }
+        
+        private void setDefaults() {
             if (userId == null) {
                 userId = UserId.of(UUID.randomUUID().toString());
             }
             if (fullName == null) {
                 fullName = preferredUsername;
             }
-            return new DevUser(new DevUserInfo(userId, preferredUsername, fullName, profileUrl, pictureUrl, email,
-                    zoneInfo, locale), authorities, encodedPassword);
         }
     }
 }

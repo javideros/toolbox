@@ -4,7 +4,6 @@ import { Notification } from '@vaadin/react-components/Notification';
 import { TaskService } from 'Frontend/generated/endpoints';
 import { useSignal } from '@vaadin/hilla-react-signals';
 import handleError from 'Frontend/views/_ErrorHandler';
-import { Group, ViewToolbar } from 'Frontend/components/ViewToolbar';
 import { useGridDataProvider } from '@vaadin/hilla-react-crud';
 
 export const config: ViewConfig = {
@@ -73,12 +72,11 @@ export default function TaskListView() {
   const dataProvider = useGridDataProvider(TaskService.list);
 
   return (
-    <main className="w-full h-full flex flex-col box-border gap-s p-m">
-      <ViewToolbar title="Task List">
-        <Group>
-          <TaskEntryForm onTaskCreated={dataProvider.refresh} />
-        </Group>
-      </ViewToolbar>
+    <main className="p-m">
+      <h1>Task List</h1>
+      <div className="flex gap-s mb-m">
+        <TaskEntryForm onTaskCreated={dataProvider.refresh} />
+      </div>
       <Grid dataProvider={dataProvider}>
         <GridColumn path="description" />
         <GridColumn path="dueDate" header="Due Date">

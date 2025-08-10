@@ -50,12 +50,15 @@ public final class UserId implements Serializable {
      * </p>
      *
      * @param userId
-     *            the user ID string (never {@code null})
+     *            the user ID string (never {@code null} or empty)
      * @return a new {@code UserId} instance
      * @throws IllegalArgumentException
-     *             if the user ID is invalid
+     *             if the user ID is null or empty
      */
     public static UserId of(String userId) {
+        if (userId == null || userId.trim().isEmpty()) {
+            throw new IllegalArgumentException("User ID cannot be null or empty");
+        }
         return new UserId(userId);
     }
 

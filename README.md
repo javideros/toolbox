@@ -1,65 +1,164 @@
-# Toolbox README
+# Vaadin + shadcn/ui Integration
 
-- [ ] TODO Replace or update this README with instructions relevant to your application
+A modern full-stack application demonstrating the integration of **Vaadin** (Java backend) with **shadcn/ui** (React frontend components) and **Tailwind CSS**.
 
-To start the application in development mode, import it into your IDE and run the `Application` class. 
-You can also start the application from the command line by running: 
+## 🚀 Features
 
-```bash
-./mvnw
-```
+- **Vaadin 24** - Full-stack Java framework with React frontend
+- **shadcn/ui** - Beautiful, accessible React components
+- **Tailwind CSS** - Utility-first CSS framework
+- **Dark/Light Mode** - Theme switching with system preference detection
+- **Spring Boot** - Backend with JPA and security
+- **Multi-Database Support** - H2 (development) and DB2 (production) profiles
+- **Zod Validation** - Type-safe form validation
+- **TypeScript** - Full type safety across the frontend
 
-To build the application in production mode, run:
+## 🛠️ Tech Stack
+
+**Backend:**
+- Java 21
+- Spring Boot 3.x
+- Vaadin 24
+- Spring Security
+- Spring Data JPA
+- H2 Database (dev) / DB2 (prod)
+
+**Frontend:**
+- React 18
+- TypeScript
+- Tailwind CSS
+- shadcn/ui components
+- Radix UI primitives
+- Zod validation
+- Lucide React icons
+
+## 🚦 Quick Start
+
+### Prerequisites
+- Java 21+
+- Maven 3.6+
+- Node.js 18+ (for frontend dependencies)
+
+### Development Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd vaadin-shadcn-integration
+   ```
+
+2. **Run the application**
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+
+3. **Access the application**
+   - Open http://localhost:8080
+   - Login with demo credentials:
+     - **Admin:** `admin` / `123`
+     - **User:** `user` / `123`
+
+### Production Build
 
 ```bash
 ./mvnw -Pproduction package
 ```
 
-To also build a Docker image, continue by running:
+## 🎨 UI Components
 
+This project showcases the integration of shadcn/ui components with Vaadin:
+
+- **Button** - Multiple variants and sizes
+- **Card** - Complete card system with header, content, footer
+- **Dropdown Menu** - Accessible dropdown menus
+- **Theme Toggle** - Dark/light mode switcher
+- **Form Validation** - Zod-powered type-safe validation
+
+## 🗄️ Database Profiles
+
+**H2 (Development - Default):**
 ```bash
-docker build -t my-application:latest .
+./mvnw spring-boot:run
 ```
 
-## Getting Started
+**DB2 (Production):**
+```bash
+./mvnw spring-boot:run -Pdb2
+```
 
-The [Getting Started](https://vaadin.com/docs/latest/getting-started) guide will quickly familiarize you with your new
-Toolbox implementation. You'll learn how to set up your development environment, understand the project 
-structure, and find resources to help you add muscles to your skeleton — transforming it into a fully-featured 
-application.
+## 📁 Project Structure
 
-## Disabling the Login Screen
+```
+src/
+├── main/
+│   ├── java/                          # Backend Java code
+│   │   ├── config/                     # Configuration classes
+│   │   ├── security/                   # Security configuration
+│   │   ├── functionalarea/            # Domain modules
+│   │   └── taskmanagement/            # Task management
+│   ├── frontend/                       # React frontend
+│   │   ├── components/                 # React components
+│   │   │   ├── ui/                    # shadcn/ui components
+│   │   │   ├── theme-provider.tsx     # Theme context
+│   │   │   └── mode-toggle.tsx        # Dark mode toggle
+│   │   ├── lib/                       # Utility functions
+│   │   ├── validation/                # Zod schemas
+│   │   ├── views/                     # Page components
+│   │   └── styles/                    # CSS files
+│   └── resources/                      # Application resources
+└── test/                              # Test files
+```
 
-By default, all views in the project are restricted to *authenticated users*. This means that if you try to access any
-view without being logged in, you'll be redirected to the login screen.
+## 🔧 Key Integration Points
 
-To make views publicly accessible, set the `loginRequired` property to `false` in the view's `config` object:
+### 1. Tailwind + Vaadin Components
+```css
+/* Dark mode for Vaadin components */
+.dark vaadin-app-layout {
+  --lumo-base-color: hsl(222.2 84% 4.9%);
+  --lumo-contrast: hsl(210, 40%, 98%);
+}
+```
 
+### 2. shadcn/ui + Vaadin Layout
 ```tsx
-export const config: ViewConfig = {
-  // ...
-  loginRequired: false,
-};
+// React components within Vaadin layout
+<AppLayout>
+  <Card>
+    <CardHeader>
+      <CardTitle>Dashboard</CardTitle>
+    </CardHeader>
+    <CardContent>
+      {/* Your content */}
+    </CardContent>
+  </Card>
+</AppLayout>
 ```
 
-For example, applying this change to `src/main/frontend/views/@index.tsx` allows you to open http://localhost:8080 
-without logging in.
+### 3. Type-Safe Validation
+```typescript
+const FunctionalAreaSchema = z.object({
+  code: z.string().regex(/^[A-Z]{2}$/, 'Code must be 2 uppercase letters'),
+  name: z.string().min(1, 'Name is required'),
+  description: z.string().min(1, 'Description is required')
+});
+```
 
-If you allow anonymous access to `src/main/frontend/views/task-list.tsx`, you’ll also need to update the method-level 
-security annotations in `TaskService`. Without these changes, the view may load, but data fetching or saving will fail 
-due to backend access restrictions.
+## 📚 Documentation
 
-## Removing Security
+For detailed setup instructions and advanced configuration, see [SETUP_GUIDE.md](SETUP_GUIDE.md).
 
-This project includes a basic, preconfigured security setup. If you prefer to implement your own security configuration
-from scratch, follow these steps to remove the existing one:
+## 🤝 Contributing
 
-- Delete the `security` Java package.
-- Delete the `src/main/frontend/security` directory.
-- Delete the `src/main/frontend/index.tsx` file.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-After these changes, you may encounter some minor compilation errors in both Java and TypeScript. These typically occur
-in places where the current security setup is referenced - for example, integration tests that run as specific users,
-or UI components (like the main layout) that display the current user's name and avatar.
+## 📄 License
 
-To resolve these issues, either remove the affected code or refactor it to align with your custom security setup.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## 🙏 Acknowledgments
+
+- [Vaadin](https://vaadin.com/) - Full-stack Java framework
+- [shadcn/ui](https://ui.shadcn.com/) - Beautiful React components
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Radix UI](https://www.radix-ui.com/) - Low-level UI primitives

@@ -17,6 +17,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 
+class SecurityConfigurationException extends RuntimeException {
+    public SecurityConfigurationException(String message) {
+        super(message);
+    }
+}
+
 /**
  * Security configuration for the development environment.
  * <p>
@@ -55,7 +61,7 @@ class DevSecurityConfig {
     DevSecurityConfig(Environment environment) {
         if (!isRunningLocally(environment)) {
             log.error("Development security config attempted in non-local environment");
-            throw new IllegalStateException("Development security can only be used when running locally");
+            throw new SecurityConfigurationException("Development security can only be used when running locally");
         }
         log.warn("╔═════════════════════════════════════════════════════════════╗");
         log.warn("║                     DEVELOPMENT SECURITY                    ║");
@@ -64,9 +70,13 @@ class DevSecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(DevLoginView.LOGIN_PATH))
-                .build();
+    SecurityFilterChain securityFilterChain(HttpSecurity http) {
+        try {
+            return http.with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(DevLoginView.LOGIN_PATH))
+                    .build();
+        } catch (Exception e) {
+            throw new SecurityConfigurationException("Failed to configure security filter chain: " + e.getMessage());
+        }
     }
 
     @Bean

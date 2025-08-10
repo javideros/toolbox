@@ -15,13 +15,17 @@ import {
 import { Suspense, useMemo } from 'react';
 import { createMenuItems } from '@vaadin/hilla-file-router/runtime.js';
 import { useAuth } from 'Frontend/security/auth';
+import { ThemeProvider } from '../components/theme-provider';
+import { ModeToggle } from '../components/mode-toggle';
 
 function Header() {
-  // TODO Replace with real application logo and name
   return (
-    <div className="flex p-m gap-m items-center" slot="drawer">
-      <Icon icon="vaadin:cubes" className="text-primary icon-l" />
-      <span className="font-semibold text-l">Toolbox</span>
+    <div className="flex p-m gap-m items-center justify-between" slot="navbar">
+      <div className="flex items-center gap-m">
+        <Icon icon="vaadin:cubes" className="text-primary icon-l" />
+        <span className="font-semibold text-l">Toolbox</span>
+      </div>
+      <ModeToggle />
     </div>
   );
 }
@@ -85,15 +89,17 @@ function UserMenu() {
 
 export default function MainLayout() {
   return (
-    <AppLayout primarySection="drawer">
-      <Header />
-      <Scroller slot="drawer">
-        <MainMenu />
-      </Scroller>
-      <UserMenu />
-      <Suspense fallback={<ProgressBar indeterminate={true} className="m-0" />}>
-        <Outlet />
-      </Suspense>
-    </AppLayout>
+    <ThemeProvider defaultTheme="system" storageKey="toolbox-theme">
+      <AppLayout primarySection="drawer">
+        <Header />
+        <Scroller slot="drawer">
+          <MainMenu />
+        </Scroller>
+        <UserMenu />
+        <Suspense fallback={<ProgressBar indeterminate={true} className="m-0" />}>
+          <Outlet />
+        </Suspense>
+      </AppLayout>
+    </ThemeProvider>
   );
 }

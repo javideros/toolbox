@@ -27,20 +27,26 @@ public abstract class AbstractEntity<ID> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        } else if (obj == this) {
-            return true;
+        if (obj == null || obj == this) {
+            return obj == this;
         }
 
+        if (!isSameClass(obj)) {
+            return false;
+        }
+
+        if (!(obj instanceof AbstractEntity<?> other)) {
+            return false;
+        }
+        
+        var id = getId();
+        return id != null && id.equals(other.getId());
+    }
+    
+    private boolean isSameClass(Object obj) {
         var thisUserClass = ProxyUtils.getUserClass(getClass());
         var otherUserClass = ProxyUtils.getUserClass(obj);
-        if (thisUserClass != otherUserClass) {
-            return false;
-        }
-
-        var id = getId();
-        return id != null && id.equals(((AbstractEntity<?>) obj).getId());
+        return thisUserClass == otherUserClass;
     }
 
 }

@@ -13,10 +13,15 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 
+class TaskCreationException extends RuntimeException {
+    public TaskCreationException(String message) {
+        super(message);
+    }
+}
+
 @BrowserCallable
-// Until https://github.com/vaadin/hilla/issues/3271 is fixed, @PreAuthorize needs to be combined with @AnonymousAllowed
-@AnonymousAllowed
 @PreAuthorize("isAuthenticated()")
+// TODO: Remove workaround when https://github.com/vaadin/hilla/issues/3271 is resolved
 public class TaskService {
 
     private final TaskRepository taskRepository;
@@ -31,7 +36,7 @@ public class TaskService {
     @Transactional
     public void createTask(String description, @Nullable LocalDate dueDate) {
         if ("fail".equals(description)) {
-            throw new RuntimeException("This is for testing the error handler");
+            throw new TaskCreationException("Task creation failed for testing purposes");
         }
         var task = new Task();
         task.setDescription(description);
@@ -42,7 +47,7 @@ public class TaskService {
 
     @Transactional(readOnly = true)
     public List<Task> list(Pageable pageable) {
-        return taskRepository.findAllBy(pageable).toList();
+        return taskRepository.findAllBy(pageable).getContent();
     }
 
 }

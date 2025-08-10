@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "title": "Task List",
+    "description": "Manage and track your tasks",
+    "link": "/task-list",
+    "icon": "vaadin:tasks",
+    "enabled": true,
+    "showInMenu": true,
+    "showInDashboard": true,
+    "adminOnly": false,
+    "order": 1
+  },
+  {
+    "id": 2,
+    "title": "Reference",
+    "description": "System reference data management",
+    "link": "/reference",
+    "icon": "vaadin:table",
+    "enabled": true,
+    "showInMenu": true,
+    "showInDashboard": true,
+    "adminOnly": false,
+    "order": 2
+  },
+  {
+    "id": 3,
+    "title": "Functional Areas",
+    "description": "Configure system functional areas",
+    "link": "/functional-area",
+    "icon": "vaadin:cogs",
+    "enabled": true,
+    "showInMenu": true,
+    "showInDashboard": true,
+    "adminOnly": true,
+    "order": 3
+  },
+  {
+    "id": 5,
+    "title": "Settings",
+    "description": "Application settings and configuration",
+    "link": "/settings",
+    "icon": "vaadin:cog-o",
+    "enabled": true,
+    "showInMenu": true,
+    "showInDashboard": true,
+    "adminOnly": false,
+    "order": 5
+  },
+  {
+    "id": 6,
+    "title": "Users",
+    "description": "User management and administration",
+    "link": "/users",
+    "icon": "vaadin:users",
+    "enabled": true,
+    "showInMenu": true,
+    "showInDashboard": true,
+    "adminOnly": false,
+    "order": 6
+  },
+  {
+    "id": 7,
+    "title": "Analytics",
+    "description": "View system analytics and reports",
+    "link": "/analytics",
+    "icon": "vaadin:chart",
+    "enabled": true,
+    "showInMenu": true,
+    "showInDashboard": true,
+    "adminOnly": false,
+    "order": 7
+  },
+  {
+    "id": 8,
+    "title": "Reports",
+    "description": "Generate and view system reports",
+    "link": "/reports",
+    "icon": "vaadin:file-text",
+    "enabled": true,
+    "showInMenu": true,
+    "showInDashboard": true,
+    "adminOnly": false,
+    "order": 8
+  }
+]

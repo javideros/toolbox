@@ -5,13 +5,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Profile("!h2 & !db2")
-public interface TaskRepository extends JpaRepository<Task, Long>, JpaSpecificationExecutor<Task> {
+@Profile("db2")
+public interface DB2TaskRepository extends JpaRepository<Task, Long>, JpaSpecificationExecutor<Task> {
 
-    // If you don't need a total row count, Slice is better than Page as it only performs a select query.
-    // Page performs both a select and a count query.
     Slice<Task> findAllBy(Pageable pageable);
+    
+    // DB2 specific queries if needed
+    @Query("SELECT t FROM Task t WHERE t.description LIKE CONCAT('%', ?1, '%')")
+    Slice<Task> findByDescriptionContaining(String description, Pageable pageable);
 }

@@ -116,12 +116,12 @@ final class OidcUserAdapter implements OidcUser, AppUserPrincipal {
      */
     static ZoneId parseZoneInfo(@Nullable String zoneInfo) {
         if (zoneInfo == null) {
-            return ZoneId.systemDefault();
+            return ZoneId.of("UTC");
         }
         try {
             return ZoneId.of(zoneInfo);
         } catch (DateTimeException e) {
-            return ZoneId.systemDefault();
+            return ZoneId.of("UTC");
         }
     }
 
@@ -154,7 +154,7 @@ final class OidcUserAdapter implements OidcUser, AppUserPrincipal {
      */
     static Locale parseLocale(@Nullable String locale) {
         if (locale == null) {
-            return Locale.getDefault();
+            return Locale.ROOT;
         }
         return Locale.forLanguageTag(locale);
     }

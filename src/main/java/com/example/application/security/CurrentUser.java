@@ -140,7 +140,7 @@ public class CurrentUser {
      *             {@link AppUserPrincipal}
      */
     public AppUserInfo require() {
-        return get().orElseThrow(() -> new AuthenticationCredentialsNotFoundException("No current user"));
+        return get().orElseThrow(() -> new AuthenticationCredentialsNotFoundException("Authentication required: No authenticated user found in security context"));
     }
 
     /**
@@ -156,6 +156,6 @@ public class CurrentUser {
      *             {@link AppUserPrincipal}
      */
     public AppUserPrincipal requirePrincipal() {
-        return getPrincipal().orElseThrow(() -> new AuthenticationCredentialsNotFoundException("No current user"));
+        return getPrincipal().orElseThrow(() -> new AuthenticationCredentialsNotFoundException("Authentication required: No authenticated principal found in security context"));
     }
 }
