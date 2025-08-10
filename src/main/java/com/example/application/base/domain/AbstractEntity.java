@@ -9,6 +9,7 @@ import org.springframework.data.util.ProxyUtils;
 public abstract class AbstractEntity<ID> {
 
     private transient int cachedHashCode;
+    private transient boolean hashCodeCalculated = false;
 
     @JsonIgnore
     public abstract @Nullable ID getId();
@@ -29,8 +30,9 @@ public abstract class AbstractEntity<ID> {
         // this we can't use getId() to calculate the hashcode. Unless you have sets
         // with lots of entities in them, returning the same hashcode should not be a
         // problem.
-        if (cachedHashCode == 0) {
+        if (!hashCodeCalculated) {
             cachedHashCode = ProxyUtils.getUserClass(getClass()).hashCode();
+            hashCodeCalculated = true;
         }
         return cachedHashCode;
     }
