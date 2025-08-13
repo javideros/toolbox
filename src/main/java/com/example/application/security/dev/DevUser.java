@@ -249,8 +249,10 @@ final class DevUser implements AppUserPrincipal, UserDetails {
          * @return this builder for method chaining
          */
         public DevUserBuilder roles(String... roles) {
-            this.authorities.clear();
-            this.authorities.ensureCapacity(roles.length);
+            if (roles == null) {
+                throw new IllegalArgumentException("Roles must not be null");
+            }
+            this.authorities = new ArrayList<>(roles.length);
             for (var role : roles) {
                 this.authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
             }

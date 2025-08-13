@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ class FunctionalAreaServiceTest {
     }
 
     @Test
+    @Transactional
     void listAll_returns_all_functional_areas() {
         var area1 = createFunctionalArea(1L, "FI", "Financial");
         var area2 = createFunctionalArea(2L, "IT", "Information Technology");
@@ -39,6 +41,7 @@ class FunctionalAreaServiceTest {
     }
 
     @Test
+    @Transactional
     void count_returns_repository_count() {
         when(repository.count()).thenReturn(5L);
 
@@ -48,6 +51,7 @@ class FunctionalAreaServiceTest {
     }
 
     @Test
+    @Transactional
     void save_new_entity_succeeds_when_unique() {
         var newArea = createFunctionalArea(null, "FI", "Financial");
         when(repository.existsByName("Financial")).thenReturn(false);
@@ -61,6 +65,7 @@ class FunctionalAreaServiceTest {
     }
 
     @Test
+    @Transactional
     void save_new_entity_throws_exception_when_name_exists() {
         var newArea = createFunctionalArea(null, "FI", "Financial");
         when(repository.existsByName("Financial")).thenReturn(true);
@@ -71,6 +76,7 @@ class FunctionalAreaServiceTest {
     }
 
     @Test
+    @Transactional
     void save_new_entity_throws_exception_when_code_exists() {
         var newArea = createFunctionalArea(null, "FI", "Financial");
         when(repository.existsByName("Financial")).thenReturn(false);
@@ -82,6 +88,7 @@ class FunctionalAreaServiceTest {
     }
 
     @Test
+    @Transactional
     void save_existing_entity_succeeds_when_unique() {
         var existingArea = createFunctionalArea(1L, "FI", "Financial");
         when(repository.existsByNameAndIdNot("Financial", 1L)).thenReturn(false);
@@ -95,6 +102,7 @@ class FunctionalAreaServiceTest {
     }
 
     @Test
+    @Transactional
     void save_existing_entity_throws_exception_when_name_exists() {
         var existingArea = createFunctionalArea(1L, "FI", "Financial");
         when(repository.existsByNameAndIdNot("Financial", 1L)).thenReturn(true);
