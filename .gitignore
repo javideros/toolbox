@@ -28,5 +28,7 @@ test-results/
 
 # Frontend build artifacts
 frontend/generated/
+src/main/frontend/generated/
 node_modules/
 package-lock.json
+vite.generated.ts
