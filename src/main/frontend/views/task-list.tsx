@@ -1,5 +1,15 @@
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
-import { Button, DatePicker, Grid, GridColumn, TextField } from '@vaadin/react-components';
+import { Grid, GridColumn, TextField } from '@vaadin/react-components';
+import { Button } from '../components/ui/button';
+import { DatePicker } from '../components/ui/date-picker';
+import { 
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '../components/ui/breadcrumb';
 import { Notification } from '@vaadin/react-components/Notification';
 import { TaskService } from 'Frontend/generated/endpoints';
 import { useSignal } from '@vaadin/hilla-react-signals';
@@ -57,11 +67,11 @@ function TaskEntryForm(props: TaskEntryFormProps) {
       />
       <DatePicker
         placeholder="Due date"
-        aria-label="Due date"
-        value={dueDate.value}
-        onValueChanged={(evt) => (dueDate.value = evt.detail.value)}
+        value={dueDate.value ? new Date(dueDate.value) : undefined}
+        onChange={(date) => (dueDate.value = date ? date.toISOString().split('T')[0] : undefined)}
+        className="w-[200px]"
       />
-      <Button onClick={createTask} theme="primary">
+      <Button onClick={createTask}>
         Create
       </Button>
     </>
@@ -73,6 +83,17 @@ export default function TaskListView() {
 
   return (
     <main className="p-m">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Task List</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <h1>Task List</h1>
       <div className="flex gap-s mb-m">
         <TaskEntryForm onTaskCreated={dataProvider.refresh} />

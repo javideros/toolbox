@@ -15,7 +15,6 @@ class SampleUsersTest {
         var admin = SampleUsers.ADMIN;
         
         assertThat(admin.getUsername()).isEqualTo(SampleUsers.ADMIN_USERNAME);
-        assertThat(admin.getUsername()).isEqualTo("admin");
         assertThat(admin.getAppUser().getUserId()).isEqualTo(SampleUsers.ADMIN_ID);
         assertThat(admin.getAppUser().getFullName()).isEqualTo("Alice Administrator");
         assertThat(admin.getAppUser().getEmail()).isEqualTo("alice@example.com");
@@ -29,7 +28,6 @@ class SampleUsersTest {
         var user = SampleUsers.USER;
         
         assertThat(user.getUsername()).isEqualTo(SampleUsers.USER_USERNAME);
-        assertThat(user.getUsername()).isEqualTo("user");
         assertThat(user.getAppUser().getUserId()).isEqualTo(SampleUsers.USER_ID);
         assertThat(user.getAppUser().getFullName()).isEqualTo("Ursula User");
         assertThat(user.getAppUser().getEmail()).isEqualTo("ursula@example.com");

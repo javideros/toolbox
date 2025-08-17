@@ -8,24 +8,30 @@ import {
   MenuBarItem,
   MenuBarItemSelectedEvent,
   ProgressBar,
-  Scroller,
-  SideNav,
-  SideNavItem,
 } from '@vaadin/react-components';
-import { Suspense, useMemo } from 'react';
+import { Suspense, useMemo, useEffect, useState } from 'react';
 import { createMenuItems } from '@vaadin/hilla-file-router/runtime.js';
 import { useAuth } from 'Frontend/security/auth';
+import { AppConfigService, DashboardConfigService } from 'Frontend/generated/endpoints';
 import { ThemeProvider } from '../components/theme-provider';
 import { ModeToggle } from '../components/mode-toggle';
+import { Button } from '../components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../components/ui/dropdown-menu';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../components/ui/sidebar';
+import { cn } from '../lib/utils';
 
 function Header() {
+  const [appName, setAppName] = useState('Toolbox');
+
+  useEffect(() => {
+    AppConfigService.getAppName().then(name => {
+      if (name) setAppName(name);
+    });
+  }, []);
+
   return (
     <div className="flex p-m gap-m items-center justify-between" slot="navbar">
-      <div className="flex items-center gap-m">
-        <Icon icon="vaadin:cubes" className="text-primary icon-l" />
-        <span className="font-semibold text-l">Toolbox</span>
-      </div>
-      <ModeToggle />
+      <span className="font-semibold text-l">{appName}</span>
     </div>
   );
 }
@@ -33,16 +39,61 @@ function Header() {
 function MainMenu() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [menuItems, setMenuItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    DashboardConfigService.getTilesForMenu().then(tiles => {
+      if (tiles) {
+        const items = tiles
+          .filter(tile => tile != null)
+          .map(tile => ({
+            to: tile.link,
+            icon: tile.icon,
+            title: tile.title
+          }));
+        setMenuItems(items);
+      }
+    }).catch(error => {
+      console.error('Failed to load menu items:', error);
+    });
+  }, []);
 
   return (
-    <SideNav className="mx-m" onNavigate={({ path }) => path != null && navigate(path)} location={location}>
-      {createMenuItems().map(({ to, icon, title }) => (
-        <SideNavItem path={to} key={to}>
-          {icon && <Icon icon={icon} slot="prefix" />}
-          {title}
-        </SideNavItem>
-      ))}
-    </SideNav>
+    <SidebarGroup>
+      <SidebarGroupContent>
+        <div className="flex items-center justify-center p-2 mb-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate('/')}
+            className="h-8 w-8 p-0"
+          >
+            <Icon icon="vaadin:cubes" className="text-primary h-6 w-6" />
+          </Button>
+        </div>
+        <SidebarMenu>
+          {menuItems.map(({ to, icon, title }) => {
+            const isActive = location.pathname === to;
+            return (
+              <SidebarMenuItem key={to}>
+                <div className="relative group">
+                  <SidebarMenuButton
+                    onClick={() => navigate(to)}
+                    isActive={isActive}
+                    className="h-8 w-8 p-0 justify-center"
+                  >
+                    {icon && <Icon icon={icon} className="h-4 w-4" />}
+                  </SidebarMenuButton>
+                  <div className="absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-sm rounded-md shadow-md border opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[9999] top-1/2 -translate-y-1/2">
+                    {title}
+                  </div>
+                </div>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 }
 
@@ -55,50 +106,50 @@ function UserMenu() {
   const pictureUrl = state.user?.pictureUrl;
   const profileUrl = state.user?.profileUrl;
 
-  const children: Array<UserMenuItem> = useMemo(() => {
-    const items: Array<UserMenuItem> = [];
-    if (profileUrl) {
-      items.push({ text: 'View Profile', action: () => window.open(profileUrl, 'blank')?.focus() });
-    }
-    // TODO Add additional items to the user menu if needed
-    items.push({ text: 'Logout', action: logout });
-    return items;
-  }, [profileUrl, logout]);
-
   if (!state.user) {
     return null;
   }
 
-  const items: Array<UserMenuItem> = [
-    {
-      component: (
-        <>
-          <Avatar theme="xsmall" img={pictureUrl} name={fullName} colorIndex={5} className="mr-s" /> {fullName}
-        </>
-      ),
-      children: children,
-    },
-  ];
-  const onItemSelected = (event: MenuBarItemSelectedEvent<UserMenuItem>) => {
-    event.detail.value.action?.();
-  };
   return (
-    <MenuBar theme="tertiary-inline" items={items} onItemSelected={onItemSelected} className="m-m" slot="drawer" />
+    <SidebarFooter>
+      <div className="flex flex-col gap-1">
+        <ModeToggle />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton className="h-8 w-8 p-0 justify-center">
+              <Avatar theme="xsmall" img={pictureUrl} name={fullName} colorIndex={5} />
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="right" align="end">
+            {profileUrl && (
+              <DropdownMenuItem onClick={() => window.open(profileUrl, 'blank')?.focus()}>
+                View Profile
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem onClick={logout}>
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </SidebarFooter>
   );
 }
 
 export default function MainLayout() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="toolbox-theme">
-      <AppLayout primarySection="drawer">
-        <Header />
-        <Scroller slot="drawer">
+      <AppLayout primarySection="drawer" style={{ '--vaadin-app-layout-drawer-width': '60px' } as React.CSSProperties}>
+      <Header />
+      <Sidebar slot="drawer" collapsible="icon" className="group">
+        <SidebarContent>
           <MainMenu />
-        </Scroller>
+        </SidebarContent>
         <UserMenu />
-        <Suspense fallback={<ProgressBar indeterminate={true} className="m-0" />}>
-          <Outlet />
-        </Suspense>
+      </Sidebar>
+      <Suspense fallback={<ProgressBar indeterminate={true} className="m-0" />}>
+        <Outlet />
+      </Suspense>
       </AppLayout>
     </ThemeProvider>
   );

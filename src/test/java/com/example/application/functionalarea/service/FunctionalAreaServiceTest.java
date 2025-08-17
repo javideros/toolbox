@@ -2,6 +2,7 @@ package com.example.application.functionalarea.service;
 
 import com.example.application.functionalarea.domain.FunctionalArea;
 import com.example.application.functionalarea.domain.FunctionalAreaRepository;
+import com.example.application.permissions.service.UserPermissionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,12 +21,15 @@ class FunctionalAreaServiceTest {
 
     @Mock
     private FunctionalAreaRepository repository;
+    
+    @Mock
+    private UserPermissionService userPermissionService;
 
     private FunctionalAreaService service;
 
     @BeforeEach
     void setUp() {
-        service = new FunctionalAreaService(repository);
+        service = new FunctionalAreaService(repository, userPermissionService);
     }
 
     @Test

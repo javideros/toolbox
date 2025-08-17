@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "src/main/frontend/styles/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "aliases": {
+    "components": "@vaadin/flow-frontend/components",
+    "utils": "@vaadin/flow-frontend/lib/utils",
+    "ui": "@vaadin/flow-frontend/components/ui",
+    "lib": "@vaadin/flow-frontend/lib",
+    "hooks": "@vaadin/flow-frontend/hooks"
+  },
+  "iconLibrary": "lucide"
+}

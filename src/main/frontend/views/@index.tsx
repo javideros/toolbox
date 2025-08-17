@@ -1,5 +1,11 @@
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { 
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbPage
+} from '../components/ui/breadcrumb';
 import { ChevronRight } from 'lucide-react';
 import { DashboardConfigService } from 'Frontend/generated/endpoints';
 import { useEffect, useState } from 'react';
@@ -41,6 +47,14 @@ export default function MainView() {
 
   return (
     <main className="p-6 space-y-6">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbPage>Dashboard</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <p className="text-muted-foreground">Welcome to your application dashboard</p>

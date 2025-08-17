@@ -1,0 +1,139 @@
+{
+  "screens": [
+    {
+      "id": 1,
+      "title": "Task List",
+      "description": "Manage and track your tasks",
+      "link": "/task-list",
+      "icon": "vaadin:tasks",
+      "enabled": true,
+      "showInMenu": true,
+      "showInDashboard": true,
+      "order": 1,
+      "defaultPermissions": {
+        "ADMINISTRATOR": { "canRead": true, "canWrite": true },
+        "USER": { "canRead": true, "canWrite": true }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Reference",
+      "description": "System reference data management",
+      "link": "/reference",
+      "icon": "vaadin:table",
+      "enabled": true,
+      "showInMenu": true,
+      "showInDashboard": true,
+      "order": 2,
+      "defaultPermissions": {
+        "ADMINISTRATOR": { "canRead": true, "canWrite": true },
+        "USER": { "canRead": true, "canWrite": false }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Functional Areas",
+      "description": "Configure system functional areas",
+      "link": "/functional-area",
+      "icon": "vaadin:cogs",
+      "enabled": true,
+      "showInMenu": true,
+      "showInDashboard": true,
+      "order": 3,
+      "defaultPermissions": {
+        "ADMINISTRATOR": { "canRead": true, "canWrite": true },
+        "USER": { "canRead": false, "canWrite": false }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Roles",
+      "description": "Role management and configuration",
+      "link": "/roles",
+      "icon": "vaadin:key",
+      "enabled": true,
+      "showInMenu": true,
+      "showInDashboard": true,
+      "order": 4,
+      "defaultPermissions": {
+        "ADMINISTRATOR": { "canRead": true, "canWrite": true },
+        "USER": { "canRead": false, "canWrite": false }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Permissions",
+      "description": "Screen permissions management",
+      "link": "/permissions",
+      "icon": "vaadin:shield",
+      "enabled": true,
+      "showInMenu": true,
+      "showInDashboard": true,
+      "order": 5,
+      "defaultPermissions": {
+        "ADMINISTRATOR": { "canRead": true, "canWrite": true },
+        "USER": { "canRead": false, "canWrite": false }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Users",
+      "description": "User management and administration",
+      "link": "/users",
+      "icon": "vaadin:users",
+      "enabled": true,
+      "showInMenu": true,
+      "showInDashboard": true,
+      "order": 6,
+      "defaultPermissions": {
+        "ADMINISTRATOR": { "canRead": true, "canWrite": true },
+        "USER": { "canRead": false, "canWrite": false }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Settings",
+      "description": "Application settings and configuration",
+      "link": "/settings",
+      "icon": "vaadin:cog-o",
+      "enabled": true,
+      "showInMenu": true,
+      "showInDashboard": true,
+      "order": 7,
+      "defaultPermissions": {
+        "ADMINISTRATOR": { "canRead": true, "canWrite": true },
+        "USER": { "canRead": true, "canWrite": false }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Analytics",
+      "description": "View system analytics and reports",
+      "link": "/analytics",
+      "icon": "vaadin:chart",
+      "enabled": true,
+      "showInMenu": true,
+      "showInDashboard": true,
+      "order": 8,
+      "defaultPermissions": {
+        "ADMINISTRATOR": { "canRead": true, "canWrite": true },
+        "USER": { "canRead": true, "canWrite": false }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Reports",
+      "description": "Generate and view system reports",
+      "link": "/reports",
+      "icon": "vaadin:file-text",
+      "enabled": true,
+      "showInMenu": true,
+      "showInDashboard": true,
+      "order": 9,
+      "defaultPermissions": {
+        "ADMINISTRATOR": { "canRead": true, "canWrite": true },
+        "USER": { "canRead": true, "canWrite": false }
+      }
+    }
+  ]
+}

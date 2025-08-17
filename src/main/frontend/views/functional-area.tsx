@@ -1,6 +1,19 @@
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 import { FunctionalAreaService } from 'Frontend/generated/endpoints';
-import { Grid, GridColumn, Button, Dialog, TextField, FormLayout } from '@vaadin/react-components';
+import { 
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '../components/ui/breadcrumb';
+import { Grid, GridColumn } from '@vaadin/react-components';
+import { Button } from '../components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../components/ui/dialog';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Separator } from '../components/ui/separator';
 import { useEffect, useState } from 'react';
 
 export const config: ViewConfig = {
@@ -79,12 +92,23 @@ export default function FunctionalAreaView() {
 
   return (
     <main className="p-6">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Functional Areas</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="mb-6 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold mb-2">Functional Areas</h1>
           <p className="text-muted-foreground">Manage system functional areas</p>
         </div>
-        <Button theme="primary" onClick={handleAdd}>Add New</Button>
+        <Button onClick={handleAdd}>Add New</Button>
       </div>
       
       <Grid items={items}>
@@ -94,46 +118,61 @@ export default function FunctionalAreaView() {
         <GridColumn header="Actions">
           {({ item }) => (
             <div className="flex gap-2">
-              <Button theme="tertiary" onClick={() => handleEdit(item)}>Edit</Button>
-              <Button theme="error tertiary" onClick={() => handleDelete(item)}>Delete</Button>
+              <Button variant="outline" onClick={() => handleEdit(item)}>Edit</Button>
+              <Button variant="destructive" onClick={() => handleDelete(item)}>Delete</Button>
             </div>
           )}
         </GridColumn>
       </Grid>
 
-      <Dialog opened={dialogOpen} onOpenedChanged={(e) => setDialogOpen(e.detail.value)}>
-        <div className="p-4" style={{ minWidth: '400px' }}>
-          <h2 className="text-xl font-bold mb-4">{editItem ? 'Edit' : 'Add'} Functional Area</h2>
-          
-          <FormLayout>
-            <TextField
-              label="Name"
-              value={formData.name}
-              onValueChanged={(e) => setFormData({ ...formData, name: e.detail.value })}
-              required
-            />
-            <TextField
-              label="Description"
-              value={formData.description}
-              onValueChanged={(e) => setFormData({ ...formData, description: e.detail.value })}
-              required
-            />
-            <TextField
-              label="Code (2 letters)"
-              value={formData.code}
-              onValueChanged={(e) => {
-                const value = e.detail.value.toUpperCase().slice(0, 2);
-                setFormData({ ...formData, code: value });
-              }}
-              required
-            />
-          </FormLayout>
-          
-          <div className="flex gap-2 justify-end mt-4">
-            <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button theme="primary" onClick={handleSave}>Save</Button>
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{editItem ? 'Edit' : 'Add'} Functional Area</DialogTitle>
+          </DialogHeader>
+          <Separator />
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">Name</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="col-span-3"
+                required
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="description" className="text-right">Description</Label>
+              <Input
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="col-span-3"
+                required
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="code" className="text-right">Code</Label>
+              <Input
+                id="code"
+                value={formData.code}
+                onChange={(e) => {
+                  const value = e.target.value.toUpperCase().slice(0, 2);
+                  setFormData({ ...formData, code: value });
+                }}
+                className="col-span-3"
+                placeholder="2 letters"
+                maxLength={2}
+                required
+              />
+            </div>
           </div>
-        </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleSave}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
       </Dialog>
     </main>
   );

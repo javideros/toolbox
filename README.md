@@ -7,10 +7,12 @@ A modern full-stack application demonstrating the integration of **Vaadin** (Jav
 - **Vaadin 24** - Full-stack Java framework with React frontend
 - **shadcn/ui** - Beautiful, accessible React components
 - **Tailwind CSS** - Utility-first CSS framework
+- **RBAC System** - Role-based access control with screen-level permissions
+- **Dynamic UI** - Permission-filtered dashboard and navigation
+- **Configuration-Driven** - Single JSON file controls screens and permissions
 - **Dark/Light Mode** - Theme switching with system preference detection
 - **Spring Boot** - Backend with JPA and security
 - **Multi-Database Support** - H2 (development) and DB2 (production) profiles
-- **Zod Validation** - Type-safe form validation
 - **TypeScript** - Full type safety across the frontend
 
 ## 🛠️ Tech Stack
@@ -109,44 +111,63 @@ src/
 └── test/                              # Test files
 ```
 
+## 🔒 Role-Based Access Control (RBAC)
+
+The application features a comprehensive **RBAC system** with:
+
+- **Screen-level permissions** (Read/Write per screen)
+- **Role-based access control** (Administrator/User roles)
+- **Dynamic UI filtering** (Dashboard tiles and menu items)
+- **Service-level enforcement** with clear error messages
+- **Configuration-driven setup** via `screens-config.json`
+
+### Permission Matrix Example:
+| Screen | Administrator | User |
+|--------|---------------|------|
+| Task List | Read + Write | Read + Write |
+| Reference | Read + Write | Read only |
+| Functional Areas | Read + Write | No access |
+| Users | Read + Write | No access |
+
+**See [RBAC_PERMISSIONS.md](RBAC_PERMISSIONS.md) for complete documentation.**
+
 ## 🔧 Key Integration Points
 
-### 1. Tailwind + Vaadin Components
-```css
-/* Dark mode for Vaadin components */
-.dark vaadin-app-layout {
-  --lumo-base-color: hsl(222.2 84% 4.9%);
-  --lumo-contrast: hsl(210, 40%, 98%);
+### 1. Configuration-Driven Screens
+```json
+{
+  "title": "Task List",
+  "link": "/task-list",
+  "icon": "vaadin:tasks",
+  "defaultPermissions": {
+    "ADMINISTRATOR": { "canRead": true, "canWrite": true },
+    "USER": { "canRead": true, "canWrite": true }
+  }
 }
 ```
 
-### 2. shadcn/ui + Vaadin Layout
-```tsx
-// React components within Vaadin layout
-<AppLayout>
-  <Card>
-    <CardHeader>
-      <CardTitle>Dashboard</CardTitle>
-    </CardHeader>
-    <CardContent>
-      {/* Your content */}
-    </CardContent>
-  </Card>
-</AppLayout>
+### 2. Permission Enforcement
+```java
+@Override
+@Transactional
+public Entity save(Entity entity) {
+    userPermissionService.requireWritePermission("Screen Name");
+    return repository.save(entity);
+}
 ```
 
-### 3. Type-Safe Validation
+### 3. Dynamic UI Filtering
 ```typescript
-const FunctionalAreaSchema = z.object({
-  code: z.string().regex(/^[A-Z]{2}$/, 'Code must be 2 uppercase letters'),
-  name: z.string().min(1, 'Name is required'),
-  description: z.string().min(1, 'Description is required')
-});
+// Dashboard tiles filtered by user permissions
+const tiles = await DashboardConfigService.getTilesForDashboard();
+// Menu items filtered by same permissions
+const menuItems = await DashboardConfigService.getTilesForMenu();
 ```
 
 ## 📚 Documentation
 
-For detailed setup instructions and advanced configuration, see [SETUP_GUIDE.md](SETUP_GUIDE.md).
+- **[Setup Guide](SETUP_GUIDE.md)** - Detailed setup instructions and advanced configuration
+- **[RBAC & Permissions](RBAC_PERMISSIONS.md)** - Complete guide to Role-Based Access Control and screen modularity
 
 ## 🤝 Contributing
 

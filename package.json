@@ -4,8 +4,13 @@
   "type": "module",
   "dependencies": {
     "@polymer/polymer": "3.5.2",
+    "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-dropdown-menu": "^2.1.15",
+    "@radix-ui/react-label": "^2.1.1",
+    "@radix-ui/react-popover": "^1.1.4",
+    "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tooltip": "^1.1.6",
     "@vaadin/bundles": "24.8.4",
     "@vaadin/common-frontend": "0.0.19",
     "@vaadin/hilla-file-router": "24.8.5",
@@ -32,6 +37,7 @@
     "lucide-react": "^0.539.0",
     "proj4": "2.15.0",
     "react": "18.3.1",
+    "react-day-picker": "^8.10.1",
     "react-dom": "18.3.1",
     "react-router": "7.6.1",
     "tailwind-merge": "^3.3.1",
@@ -136,7 +142,7 @@
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "2a5c293f7044df3169a54643c591b37147c5987581a9de1e075036aabbd2ac45"
+    "hash": "3b4307c9320601a3ded09742cd01a09006834213ff8173f52d82f8535284c569"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -238,7 +244,13 @@
     "lucide-react": "$lucide-react",
     "tailwind-merge": "$tailwind-merge",
     "tailwindcss-animate": "$tailwindcss-animate",
+    "@radix-ui/react-dialog": "$@radix-ui/react-dialog",
     "@radix-ui/react-dropdown-menu": "$@radix-ui/react-dropdown-menu",
+    "@radix-ui/react-label": "$@radix-ui/react-label",
+    "@radix-ui/react-popover": "$@radix-ui/react-popover",
+    "@radix-ui/react-separator": "$@radix-ui/react-separator",
+    "@radix-ui/react-tooltip": "$@radix-ui/react-tooltip",
+    "react-day-picker": "$react-day-picker",
     "zod": "$zod"
   }
 }

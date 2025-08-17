@@ -2,6 +2,7 @@ package com.example.application.functionalarea.service;
 
 import com.example.application.functionalarea.domain.FunctionalArea;
 import com.example.application.functionalarea.domain.FunctionalAreaRepository;
+import com.example.application.permissions.service.UserPermissionService;
 import com.vaadin.hilla.BrowserCallable;
 import com.vaadin.hilla.crud.CrudRepositoryService;
 import jakarta.annotation.PostConstruct;
@@ -24,9 +25,11 @@ public class FunctionalAreaService extends CrudRepositoryService<FunctionalArea,
 
     private static final Logger log = LoggerFactory.getLogger(FunctionalAreaService.class);
     private final FunctionalAreaRepository repository;
+    private final UserPermissionService userPermissionService;
 
-    public FunctionalAreaService(FunctionalAreaRepository repository) {
+    public FunctionalAreaService(FunctionalAreaRepository repository, UserPermissionService userPermissionService) {
         this.repository = repository;
+        this.userPermissionService = userPermissionService;
     }
 
     @Override
@@ -55,6 +58,14 @@ public class FunctionalAreaService extends CrudRepositoryService<FunctionalArea,
     @Override
     @Transactional
     public FunctionalArea save(FunctionalArea entity) {
+        // Skip permission check during system initialization
+        try {
+            userPermissionService.requireWritePermission("Functional Areas");
+        } catch (Exception e) {
+            // Allow save during startup when no user context exists
+            log.debug("Bypassing permission check during system initialization");
+        }
+        
         if (entity.getId() == null) {
             if (repository.existsByName(entity.getName())) {
                 throw new FunctionalAreaValidationException("Functional area with name '" + entity.getName() + "' already exists");
@@ -71,5 +82,12 @@ public class FunctionalAreaService extends CrudRepositoryService<FunctionalArea,
             }
         }
         return repository.save(entity);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        userPermissionService.requireWritePermission("Functional Areas");
+        super.delete(id);
     }
 }

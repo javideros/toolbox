@@ -79,7 +79,7 @@ public final class SampleUsers {
      * This constant can be used with {@code @WithUserDetails} in tests to authenticate as the admin user.
      * </p>
      */
-    public static final String ADMIN_USERNAME = "admin";
+    public static final String ADMIN_USERNAME = "alice";
 
     /**
      * The admin sample user with administrative privileges.
@@ -106,7 +106,7 @@ public final class SampleUsers {
      * This constant can be used with {@code @WithUserDetails} in tests to authenticate as the regular user.
      * </p>
      */
-    public static final String USER_USERNAME = "user";
+    public static final String USER_USERNAME = "ursula";
 
     /**
      * The regular sample user with standard privileges.
