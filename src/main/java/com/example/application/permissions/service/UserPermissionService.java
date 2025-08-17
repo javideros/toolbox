@@ -16,6 +16,24 @@ public class UserPermissionService {
         this.permissionService = permissionService;
     }
 
+    public boolean hasReadPermission(String screenName) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null) return false;
+            
+            String username = auth.getName();
+            var user = userService.findByUsername(username);
+            if (user.isEmpty()) return false;
+            
+            // Check permissions for all user roles
+            return user.get().getRoles().stream()
+                .flatMap(role -> permissionService.findByRoleId(role.getId()).stream())
+                .anyMatch(permission -> screenName.equals(permission.getScreenName()) && permission.isCanRead());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public boolean hasWritePermission(String screenName) {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();

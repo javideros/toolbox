@@ -91,7 +91,7 @@ export default function FunctionalAreaView() {
   };
 
   return (
-    <main className="p-6">
+    <main className="space-y-6">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -103,27 +103,29 @@ export default function FunctionalAreaView() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="mb-6 flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Functional Areas</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Functional Areas</h1>
           <p className="text-muted-foreground">Manage system functional areas</p>
         </div>
-        <Button onClick={handleAdd}>Add New</Button>
+        <Button onClick={handleAdd} className="w-full sm:w-auto">Add New</Button>
       </div>
       
-      <Grid items={items}>
-        <GridColumn path="name" header="Name" />
-        <GridColumn path="description" header="Description" />
-        <GridColumn path="code" header="Code" />
-        <GridColumn header="Actions">
-          {({ item }) => (
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={() => handleEdit(item)}>Edit</Button>
-              <Button variant="destructive" onClick={() => handleDelete(item)}>Delete</Button>
-            </div>
-          )}
-        </GridColumn>
-      </Grid>
+      <div className="overflow-x-auto">
+        <Grid items={items} className="min-w-full">
+          <GridColumn path="name" header="Name" className="min-w-[120px]" />
+          <GridColumn path="description" header="Description" className="min-w-[200px]" />
+          <GridColumn path="code" header="Code" className="min-w-[80px]" />
+          <GridColumn header="Actions" className="min-w-[140px]">
+            {({ item }) => (
+              <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
+                <Button variant="outline" size="sm" onClick={() => handleEdit(item)} className="text-xs">Edit</Button>
+                <Button variant="destructive" size="sm" onClick={() => handleDelete(item)} className="text-xs">Delete</Button>
+              </div>
+            )}
+          </GridColumn>
+        </Grid>
+      </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
@@ -132,28 +134,28 @@ export default function FunctionalAreaView() {
           </DialogHeader>
           <Separator />
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">Name</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+              <Label htmlFor="name" className="sm:text-right">Name</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="col-span-3"
+                className="sm:col-span-3"
                 required
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="text-right">Description</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+              <Label htmlFor="description" className="sm:text-right">Description</Label>
               <Input
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="col-span-3"
+                className="sm:col-span-3"
                 required
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="code" className="text-right">Code</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+              <Label htmlFor="code" className="sm:text-right">Code</Label>
               <Input
                 id="code"
                 value={formData.code}
@@ -161,16 +163,16 @@ export default function FunctionalAreaView() {
                   const value = e.target.value.toUpperCase().slice(0, 2);
                   setFormData({ ...formData, code: value });
                 }}
-                className="col-span-3"
+                className="sm:col-span-3"
                 placeholder="2 letters"
                 maxLength={2}
                 required
               />
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSave}>Save</Button>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="w-full sm:w-auto">Cancel</Button>
+            <Button onClick={handleSave} className="w-full sm:w-auto">Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -2,7 +2,6 @@ package com.example.application.dashboard.service;
 
 import com.example.application.dashboard.domain.DashboardTile;
 import com.example.application.permissions.service.PermissionService;
-import com.example.application.roles.service.RoleService;
 import com.example.application.users.service.UserService;
 import com.example.application.config.ScreensConfigService;
 import com.vaadin.hilla.BrowserCallable;
@@ -25,13 +24,11 @@ public class DashboardConfigService {
     private static final Logger log = LoggerFactory.getLogger(DashboardConfigService.class);
     private List<DashboardTile> cachedTiles;
     private final PermissionService permissionService;
-    private final RoleService roleService;
     private final UserService userService;
     private final ScreensConfigService screensConfigService;
 
-    public DashboardConfigService(PermissionService permissionService, RoleService roleService, UserService userService, ScreensConfigService screensConfigService) {
+    public DashboardConfigService(PermissionService permissionService, UserService userService, ScreensConfigService screensConfigService) {
         this.permissionService = permissionService;
-        this.roleService = roleService;
         this.userService = userService;
         this.screensConfigService = screensConfigService;
     }

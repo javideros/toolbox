@@ -2,7 +2,6 @@ package com.example.application.config;
 
 import com.example.application.functionalarea.domain.FunctionalArea;
 import com.example.application.functionalarea.service.FunctionalAreaService;
-import com.example.application.permissions.domain.Permission;
 import com.example.application.permissions.service.PermissionService;
 import com.example.application.roles.domain.Role;
 import com.example.application.roles.service.RoleService;

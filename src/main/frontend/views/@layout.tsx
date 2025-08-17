@@ -19,8 +19,13 @@ import { Button } from '../components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../components/ui/dropdown-menu';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../components/ui/sidebar';
 import { cn } from '../lib/utils';
+import { Menu, X } from 'lucide-react';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import { KeyboardShortcutsHelp } from '../components/keyboard-shortcuts-help';
+import { Toaster } from '../components/ui/sonner';
+import '../styles/accessibility.css';
 
-function Header() {
+function Header({ onMenuToggle, isMobileMenuOpen }: { onMenuToggle: () => void; isMobileMenuOpen: boolean }) {
   const [appName, setAppName] = useState('Toolbox');
 
   useEffect(() => {
@@ -31,7 +36,18 @@ function Header() {
 
   return (
     <div className="flex p-m gap-m items-center justify-between" slot="navbar">
-      <span className="font-semibold text-l">{appName}</span>
+      <div className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onMenuToggle}
+          className="md:hidden h-8 w-8"
+        >
+          {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+        </Button>
+        <span className="font-semibold text-l">{appName}</span>
+      </div>
+      <KeyboardShortcutsHelp />
     </div>
   );
 }
@@ -113,7 +129,7 @@ function UserMenu() {
   return (
     <SidebarFooter>
       <div className="flex flex-col gap-1">
-        <ModeToggle />
+        <ModeToggle data-theme-toggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton className="h-8 w-8 p-0 justify-center">
@@ -137,20 +153,53 @@ function UserMenu() {
 }
 
 export default function MainLayout() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  useKeyboardShortcuts(); // Enable keyboard shortcuts
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <ThemeProvider defaultTheme="system" storageKey="toolbox-theme">
-      <AppLayout primarySection="drawer" style={{ '--vaadin-app-layout-drawer-width': '60px' } as React.CSSProperties}>
-      <Header />
-      <Sidebar slot="drawer" collapsible="icon" className="group">
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+      <AppLayout primarySection="drawer" style={{ 
+        '--vaadin-app-layout-drawer-width': '60px',
+        '--vaadin-app-layout-drawer-overlay': 'var(--lumo-shade-20pct)' 
+      } as React.CSSProperties}>
+      <Header onMenuToggle={toggleMobileMenu} isMobileMenuOpen={isMobileMenuOpen} />
+      
+      {/* Mobile overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden" 
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+      
+      <Sidebar 
+        slot="drawer" 
+        collapsible="icon" 
+        className={cn(
+          "group transition-transform duration-200 z-50",
+          "md:relative md:translate-x-0",
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        )}
+      >
         <SidebarContent>
           <MainMenu />
         </SidebarContent>
         <UserMenu />
       </Sidebar>
       <Suspense fallback={<ProgressBar indeterminate={true} className="m-0" />}>
-        <Outlet />
+        <div id="main-content" className="px-4 py-6 sm:px-6">
+          <Outlet />
+        </div>
       </Suspense>
       </AppLayout>
+      <Toaster />
     </ThemeProvider>
   );
 }

@@ -1,8 +1,12 @@
-# Vaadin + shadcn/ui Integration
+# Vaadin + shadcn/ui Integration Framework
 
-A modern full-stack application demonstrating the integration of **Vaadin** (Java backend) with **shadcn/ui** (React frontend components) and **Tailwind CSS**.
+A **demonstration framework** and **reference implementation** showcasing how to build modern full-stack applications with **Vaadin** (Java backend), **shadcn/ui** (React frontend components), and **Tailwind CSS**.
 
-## 🚀 Features
+> **Purpose**: This project serves as both a working framework for building enterprise applications and a comprehensive example of integrating Vaadin's full-stack Java capabilities with modern React UI libraries.
+
+## 🎯 Framework Capabilities
+
+### Core Integration Features
 
 - **Vaadin 24** - Full-stack Java framework with React frontend
 - **shadcn/ui** - Beautiful, accessible React components
@@ -17,7 +21,9 @@ A modern full-stack application demonstrating the integration of **Vaadin** (Jav
 - **E2E Testing** - Playwright-based automated testing with Maven integration
 - **Permission Management UI** - Complete role-based permission matrix interface
 
-## 🛠️ Tech Stack
+## 🏗️ Architecture Demonstration
+
+### Integration Stack
 
 **Backend:**
 - Java 21
@@ -36,7 +42,7 @@ A modern full-stack application demonstrating the integration of **Vaadin** (Jav
 - Zod validation
 - Lucide React icons
 
-## 🚦 Quick Start
+## 🚀 Try the Demo
 
 ### Prerequisites
 - Java 21+
@@ -68,15 +74,15 @@ A modern full-stack application demonstrating the integration of **Vaadin** (Jav
 ./mvnw -Pproduction package
 ```
 
-## 🎨 UI Components
+## 🎨 Component Integration Showcase
 
-This project showcases the integration of shadcn/ui components with Vaadin:
+Demonstrates seamless integration of shadcn/ui with Vaadin components:
 
-- **Button** - Multiple variants and sizes
-- **Card** - Complete card system with header, content, footer
-- **Dropdown Menu** - Accessible dropdown menus
-- **Theme Toggle** - Dark/light mode switcher
-- **Form Validation** - Zod-powered type-safe validation
+- **Hybrid UI** - shadcn/ui components alongside Vaadin Grid, TextField, etc.
+- **Consistent Theming** - Unified dark/light mode across both component systems
+- **Form Integration** - Zod validation with Vaadin form components
+- **Toast Notifications** - Sonner toasts replacing Vaadin notifications
+- **Responsive Design** - Tailwind CSS with Vaadin's responsive capabilities
 
 ## 🗄️ Database Profiles
 
@@ -176,7 +182,9 @@ The application features a comprehensive **RBAC system** with:
 
 **See [RBAC_PERMISSIONS.md](RBAC_PERMISSIONS.md) for complete documentation.**
 
-## 🔧 Key Integration Points
+## 🔧 Integration Patterns
+
+### Framework Design Patterns
 
 ### 1. Configuration-Driven Screens
 ```json
@@ -235,14 +243,31 @@ const menuItems = await DashboardConfigService.getTilesForMenu();
 </profile>
 ```
 
-## 📚 Documentation
+## 📚 Framework Documentation
 
-- **[Setup Guide](SETUP_GUIDE.md)** - Detailed setup instructions and advanced configuration
-- **[RBAC & Permissions](RBAC_PERMISSIONS.md)** - Complete guide to Role-Based Access Control and screen modularity
+- **[Setup Guide](SETUP_GUIDE.md)** - Framework setup and customization
+- **[RBAC & Permissions](RBAC_PERMISSIONS.md)** - Permission system architecture
+- **[Integration Guide](INTEGRATION_GUIDE.md)** - How to integrate Vaadin with shadcn/ui
+- **[Testing Strategy](TESTING.md)** - E2E testing approach for hybrid applications
 
-## 🤝 Contributing
+## 🤝 Using This Framework
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+**As a Reference:**
+- Study the integration patterns
+- Copy specific implementation approaches
+- Use as a starting point for similar projects
+
+**As a Framework:**
+- Fork and customize for your needs
+- Extend the RBAC system
+- Add your own screens and components
+
+**Contributing:**
+Contributions to improve the demonstration are welcome! Focus on:
+- Better integration examples
+- Additional component showcases
+- Performance optimizations
+- Documentation improvements
 
 ## 📄 License
 

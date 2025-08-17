@@ -5,7 +5,6 @@ import com.example.application.functionalarea.service.FunctionalAreaService;
 import com.example.application.permissions.service.PermissionService;
 import com.example.application.roles.service.RoleService;
 import com.example.application.users.service.UserService;
-import com.example.application.config.ScreensConfigService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

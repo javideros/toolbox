@@ -12,6 +12,7 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
 import { useEffect, useState } from 'react';
+import { ScreenHelp } from '../components/screen-help';
 
 export const config: ViewConfig = {
   menu: {
@@ -121,7 +122,7 @@ export default function PermissionsView() {
   };
 
   return (
-    <main className="p-6">
+    <main className="space-y-6">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -134,12 +135,54 @@ export default function PermissionsView() {
         </BreadcrumbList>
       </Breadcrumb>
       
-      <div className="mb-6 flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Screen Permissions</h1>
+          <div className="flex items-center gap-2 mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold">Screen Permissions</h1>
+            <ScreenHelp 
+              title="Screen Permissions"
+              content={
+                <div>
+                  <h3>Role-Based Access Control (RBAC)</h3>
+                  <p>Control what users can see and do in the application based on their roles.</p>
+                  
+                  <h4>How It Works</h4>
+                  <ol>
+                    <li><strong>Select a Role:</strong> Choose from Administrator or User</li>
+                    <li><strong>Set Permissions:</strong> Check boxes for Read/Write access</li>
+                    <li><strong>Save Changes:</strong> Permissions update automatically</li>
+                  </ol>
+                  
+                  <h4>Permission Types</h4>
+                  <ul>
+                    <li><strong>Read:</strong> User can view the screen and its data</li>
+                    <li><strong>Write:</strong> User can create, edit, and delete items</li>
+                    <li><strong>No Access:</strong> Screen is hidden from user</li>
+                  </ul>
+                  
+                  <h4>Important Rules</h4>
+                  <ul>
+                    <li>Write permission requires Read permission</li>
+                    <li>Changes apply immediately to user sessions</li>
+                    <li>Admin role typically has full access</li>
+                  </ul>
+                  
+                  <h4>Default Roles</h4>
+                  <ul>
+                    <li><strong>Administrator:</strong> Full access to all screens</li>
+                    <li><strong>User:</strong> Limited access based on permissions</li>
+                  </ul>
+                </div>
+              }
+            />
+          </div>
           <p className="text-muted-foreground">Manage role-based screen access permissions</p>
         </div>
-        <Button onClick={initializeAdminPermissions}>
+        <Button 
+          onClick={initializeAdminPermissions} 
+          className="w-full sm:w-auto"
+          aria-label="Initialize all permissions for administrator role"
+        >
           Initialize Admin Permissions
         </Button>
       </div>
@@ -150,13 +193,15 @@ export default function PermissionsView() {
             <CardTitle>Roles</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
+            <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible">
               {roles.map((role, index) => (
                 <Button
                   key={`role-${role.id || index}`}
                   variant={selectedRole?.id === role.id ? "default" : "outline"}
-                  className="w-full justify-start"
+                  className="flex-shrink-0 lg:w-full justify-start"
                   onClick={() => setSelectedRole(role)}
+                  aria-pressed={selectedRole?.id === role.id}
+                  aria-label={`Select ${role.name || 'Unknown Role'} role`}
                 >
                   {role.name || 'Unknown Role'}
                 </Button>
@@ -167,19 +212,19 @@ export default function PermissionsView() {
 
         <Card className="lg:col-span-3">
           <CardHeader>
-            <CardTitle>
+            <CardTitle className="text-base sm:text-lg">
               Screen Permissions {selectedRole && `- ${selectedRole.name}`}
             </CardTitle>
           </CardHeader>
           <CardContent>
             {selectedRole ? (
-              <div className="rounded-md border">
+              <div className="rounded-md border overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Screen</TableHead>
-                      <TableHead className="text-center">Read</TableHead>
-                      <TableHead className="text-center">Write</TableHead>
+                      <TableHead className="min-w-[120px]">Screen</TableHead>
+                      <TableHead className="text-center min-w-[60px]">Read</TableHead>
+                      <TableHead className="text-center min-w-[60px]">Write</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -187,23 +232,33 @@ export default function PermissionsView() {
                       const permission = getPermission(screen.name);
                       return (
                         <TableRow key={`screen-${screen.name}`}>
-                          <TableCell className="font-medium">{screen.name}</TableCell>
+                          <TableCell className="font-medium text-sm">{screen.name}</TableCell>
                           <TableCell className="text-center">
                             <input
                               type="checkbox"
+                              id={`read-${screen.name.replace(/\s+/g, '-').toLowerCase()}`}
                               checked={permission.canRead}
                               onChange={(e) => updatePermission(screen.name, e.target.checked, permission.canWrite)}
                               className="h-4 w-4"
+                              aria-label={`Read permission for ${screen.name}`}
                             />
                           </TableCell>
                           <TableCell className="text-center">
                             <input
                               type="checkbox"
+                              id={`write-${screen.name.replace(/\s+/g, '-').toLowerCase()}`}
                               checked={permission.canWrite}
                               disabled={!permission.canRead}
                               onChange={(e) => updatePermission(screen.name, permission.canRead, e.target.checked)}
                               className="h-4 w-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                              aria-label={`Write permission for ${screen.name}`}
+                              aria-describedby={!permission.canRead ? `write-disabled-${screen.name.replace(/\s+/g, '-').toLowerCase()}` : undefined}
                             />
+                            {!permission.canRead && (
+                              <span id={`write-disabled-${screen.name.replace(/\s+/g, '-').toLowerCase()}`} className="sr-only">
+                                Write permission requires read permission to be enabled first
+                              </span>
+                            )}
                           </TableCell>
                         </TableRow>
                       );

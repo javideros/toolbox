@@ -117,7 +117,7 @@ export default function UsersView() {
   };
 
   return (
-    <main className="p-6">
+    <main className="space-y-6">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -129,36 +129,36 @@ export default function UsersView() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="mb-6 flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Users</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Users</h1>
           <p className="text-muted-foreground">Manage user accounts and role assignments</p>
         </div>
-        <Button onClick={handleAdd}>Add User</Button>
+        <Button onClick={handleAdd} className="w-full sm:w-auto">Add User</Button>
       </div>
       
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Username</TableHead>
-              <TableHead>Full Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Roles</TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
+              <TableHead className="min-w-[100px]">Username</TableHead>
+              <TableHead className="min-w-[120px]">Full Name</TableHead>
+              <TableHead className="min-w-[150px]">Email</TableHead>
+              <TableHead className="min-w-[100px]">Roles</TableHead>
+              <TableHead className="min-w-[140px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {users.map((user) => (
               <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.username}</TableCell>
-                <TableCell>{user.fullName}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{getRoleNames(user.roles)}</TableCell>
+                <TableCell className="font-medium text-sm">{user.username}</TableCell>
+                <TableCell className="text-sm">{user.fullName}</TableCell>
+                <TableCell className="text-sm">{user.email}</TableCell>
+                <TableCell className="text-sm">{getRoleNames(user.roles)}</TableCell>
                 <TableCell>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={() => handleEdit(user)}>Edit</Button>
-                    <Button variant="destructive" size="sm" onClick={() => handleDelete(user)}>Delete</Button>
+                  <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
+                    <Button variant="outline" size="sm" onClick={() => handleEdit(user)} className="text-xs">Edit</Button>
+                    <Button variant="destructive" size="sm" onClick={() => handleDelete(user)} className="text-xs">Delete</Button>
                   </div>
                 </TableCell>
               </TableRow>
@@ -168,46 +168,46 @@ export default function UsersView() {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editUser ? 'Edit' : 'Add'} User</DialogTitle>
           </DialogHeader>
           <Separator />
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">Username</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+              <Label htmlFor="username" className="sm:text-right">Username</Label>
               <Input
                 id="username"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className="col-span-3"
+                className="sm:col-span-3"
                 required
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="fullName" className="text-right">Full Name</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+              <Label htmlFor="fullName" className="sm:text-right">Full Name</Label>
               <Input
                 id="fullName"
                 value={formData.fullName}
                 onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                className="col-span-3"
+                className="sm:col-span-3"
                 required
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">Email</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+              <Label htmlFor="email" className="sm:text-right">Email</Label>
               <Input
                 id="email"
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="col-span-3"
+                className="sm:col-span-3"
                 required
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label className="text-right">Roles</Label>
-              <div className="col-span-3 space-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-start gap-2 sm:gap-4">
+              <Label className="sm:text-right pt-2">Roles</Label>
+              <div className="sm:col-span-3 space-y-2">
                 {roles.map((role) => (
                   <div key={role.id} className="flex items-center space-x-2">
                     <input
@@ -221,6 +221,7 @@ export default function UsersView() {
                           setFormData({ ...formData, roleIds: formData.roleIds.filter(id => id !== role.id) });
                         }
                       }}
+                      className="h-4 w-4"
                     />
                     <Label htmlFor={`role-${role.id}`} className="text-sm">{role.name}</Label>
                   </div>
@@ -228,9 +229,9 @@ export default function UsersView() {
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSave}>Save</Button>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="w-full sm:w-auto">Cancel</Button>
+            <Button onClick={handleSave} className="w-full sm:w-auto">Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

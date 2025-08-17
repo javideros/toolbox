@@ -7,6 +7,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.annotation.security.PermitAll;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -33,6 +34,8 @@ public class TaskService {
     }
 
     @Transactional
+    @PermitAll
+    @PreAuthorize("@userPermissionService.hasWritePermission('Task List')")
     public void createTask(String description, @Nullable LocalDate dueDate) {
         if ("fail".equals(description)) {
             throw new TaskCreationException("Task creation failed for testing purposes");
@@ -45,6 +48,8 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
+    @PermitAll
+    @PreAuthorize("@userPermissionService.hasReadPermission('Task List')")
     public List<Task> list(Pageable pageable) {
         return taskRepository.findAllBy(pageable).getContent();
     }

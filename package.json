@@ -41,6 +41,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "18.3.1",
     "react-router": "7.6.1",
+    "sonner": "^1.7.3",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"
@@ -143,7 +144,7 @@
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "466b12833a3fa6b2aa5b5096cb515d9a41aea889dd94d107f4271966218d3721"
+    "hash": "c2e49d670ad9760baa3ec6a1fbf1ad1e7c36742abb7d35819c616b655cfb4561"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -253,6 +254,7 @@
     "@radix-ui/react-tooltip": "$@radix-ui/react-tooltip",
     "react-day-picker": "$react-day-picker",
     "zod": "$zod",
-    "@playwright/test": "$@playwright/test"
+    "@playwright/test": "$@playwright/test",
+    "sonner": "$sonner"
   }
 }

@@ -32,7 +32,7 @@ export default function ReferenceView() {
   }, []);
 
   return (
-    <main className="p-6">
+    <main className="space-y-6">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -44,14 +44,18 @@ export default function ReferenceView() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="text-3xl font-bold mb-4">Reference Table</h1>
-      <p className="text-muted-foreground mb-6">Manage reference data</p>
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Reference Table</h1>
+        <p className="text-muted-foreground">Manage reference data</p>
+      </div>
       
-      <Grid items={items}>
-        <GridColumn path="code" header="Code" />
-        <GridColumn path="description" header="Description" />
-        <GridColumn path="category" header="Category" />
-      </Grid>
+      <div className="overflow-x-auto">
+        <Grid items={items} className="min-w-full">
+          <GridColumn path="code" header="Code" className="min-w-[100px]" />
+          <GridColumn path="description" header="Description" className="min-w-[200px]" />
+          <GridColumn path="category" header="Category" className="min-w-[120px]" />
+        </Grid>
+      </div>
     </main>
   );
 }

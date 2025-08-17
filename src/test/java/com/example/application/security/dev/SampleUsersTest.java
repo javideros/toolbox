@@ -4,7 +4,6 @@ import com.example.application.security.AppRoles;
 import com.example.application.security.domain.UserId;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
