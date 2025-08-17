@@ -251,11 +251,32 @@ app.permissions.config-file=custom-screens.json
 
 ## 🧪 Testing
 
-### **Default Test Users**
-- **alice** (ADMINISTRATOR): Full access to all screens
-- **ursula** (USER): Limited access based on default permissions
+### **Automated E2E Testing**
 
-### **Testing Scenarios**
+The system includes comprehensive Playwright-based E2E tests:
+
+**Run all E2E tests:**
+```bash
+./mvnw verify -Ph2,e2e-test
+# or
+./run-e2e-tests.sh
+```
+
+**Test Coverage:**
+- **Authentication Tests**: Login flows for admin and user roles
+- **Permission Tests**: Screen access validation based on RBAC rules
+- **UI Filtering Tests**: Dashboard tiles and menu items visibility
+- **Access Control Tests**: Proper "Access Denied" handling
+
+**Test Files:**
+- `e2e-tests/tests/auth.spec.js` - Authentication and basic navigation
+- `e2e-tests/tests/permissions.spec.js` - RBAC validation and access control
+
+### **Default Test Users**
+- **admin** (ADMINISTRATOR): Full access to all screens
+- **user** (USER): Limited access based on default permissions
+
+### **Manual Testing Scenarios**
 1. **Login as admin** → Verify all tiles/menu items visible
 2. **Login as user** → Verify limited access
 3. **Modify permissions** → Verify real-time updates

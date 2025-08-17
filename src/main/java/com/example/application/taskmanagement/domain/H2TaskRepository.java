@@ -1,5 +1,6 @@
 package com.example.application.taskmanagement.domain;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -10,7 +11,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Profile("h2")
-public interface H2TaskRepository extends JpaRepository<Task, Long>, JpaSpecificationExecutor<Task> {
+@Primary
+public interface H2TaskRepository extends TaskRepository {
 
     Slice<Task> findAllBy(Pageable pageable);
     

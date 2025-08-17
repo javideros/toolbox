@@ -264,6 +264,92 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>e2e-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>pre-e2e-test</id>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <wait>1000</wait>
+                                    <maxAttempts>180</maxAttempts>
+                                    <profiles>
+                                        <profile>h2</profile>
+                                    </profiles>
+                                    <jvmArguments>-Dspring.profiles.active=h2</jvmArguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>post-e2e-test</id>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                                <phase>post-integration-test</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>1.15.0</version>
+                        <configuration>
+                            <workingDirectory>e2e-tests</workingDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>install-node-and-npm</id>
+                                <goals>
+                                    <goal>install-node-and-npm</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <nodeVersion>v18.19.0</nodeVersion>
+                                    <npmVersion>10.2.3</npmVersion>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm-install</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <arguments>install</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install-playwright</id>
+                                <goals>
+                                    <goal>npx</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <arguments>playwright install chromium</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>run-e2e-tests</id>
+                                <goals>
+                                    <goal>npx</goal>
+                                </goals>
+                                <phase>integration-test</phase>
+                                <configuration>
+                                    <arguments>playwright test</arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
 </project>

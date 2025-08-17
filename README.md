@@ -14,6 +14,8 @@ A modern full-stack application demonstrating the integration of **Vaadin** (Jav
 - **Spring Boot** - Backend with JPA and security
 - **Multi-Database Support** - H2 (development) and DB2 (production) profiles
 - **TypeScript** - Full type safety across the frontend
+- **E2E Testing** - Playwright-based automated testing with Maven integration
+- **Permission Management UI** - Complete role-based permission matrix interface
 
 ## 🛠️ Tech Stack
 
@@ -88,6 +90,38 @@ This project showcases the integration of shadcn/ui components with Vaadin:
 ./mvnw spring-boot:run -Pdb2
 ```
 
+## 🧪 Testing
+
+### End-to-End Testing
+
+The project includes comprehensive E2E testing with Playwright:
+
+**Run E2E tests (automated):**
+```bash
+./mvnw verify -Ph2,e2e-test
+```
+
+**Run E2E tests (convenience script):**
+```bash
+./run-e2e-tests.sh
+```
+
+**Manual development mode:**
+```bash
+# Terminal 1: Start application
+./mvnw spring-boot:run
+
+# Terminal 2: Run tests
+cd e2e-tests
+npm test
+```
+
+**Test Coverage:**
+- Authentication flows (admin/user login)
+- RBAC screen access validation
+- Permission-based UI filtering
+- Dashboard and navigation functionality
+
 ## 📁 Project Structure
 
 ```
@@ -96,6 +130,8 @@ src/
 │   ├── java/                          # Backend Java code
 │   │   ├── config/                     # Configuration classes
 │   │   ├── security/                   # Security configuration
+│   │   ├── permissions/                # RBAC permission system
+│   │   ├── roles/                      # Role management
 │   │   ├── functionalarea/            # Domain modules
 │   │   └── taskmanagement/            # Task management
 │   ├── frontend/                       # React frontend
@@ -107,8 +143,13 @@ src/
 │   │   ├── validation/                # Zod schemas
 │   │   ├── views/                     # Page components
 │   │   └── styles/                    # CSS files
-│   └── resources/                      # Application resources
-└── test/                              # Test files
+│   └── resources/
+│       └── screens-config.json         # Screen configuration
+├── test/                              # Backend tests
+e2e-tests/                             # E2E testing suite
+├── tests/                             # Playwright tests
+├── package.json                       # Node.js dependencies
+└── playwright.config.js               # Test configuration
 ```
 
 ## 🔒 Role-Based Access Control (RBAC)
@@ -127,7 +168,11 @@ The application features a comprehensive **RBAC system** with:
 | Task List | Read + Write | Read + Write |
 | Reference | Read + Write | Read only |
 | Functional Areas | Read + Write | No access |
+| Permissions | Read + Write | No access |
 | Users | Read + Write | No access |
+| Settings | Read + Write | Read only |
+| Analytics | Read + Write | Read only |
+| Reports | Read + Write | Read only |
 
 **See [RBAC_PERMISSIONS.md](RBAC_PERMISSIONS.md) for complete documentation.**
 
@@ -162,6 +207,32 @@ public Entity save(Entity entity) {
 const tiles = await DashboardConfigService.getTilesForDashboard();
 // Menu items filtered by same permissions
 const menuItems = await DashboardConfigService.getTilesForMenu();
+```
+
+### 4. E2E Testing Integration
+```xml
+<!-- Maven profile for automated E2E testing -->
+<profile>
+  <id>e2e-test</id>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>run-e2e-tests</id>
+            <goals><goal>npm</goal></goals>
+            <configuration>
+              <arguments>test</arguments>
+              <workingDirectory>e2e-tests</workingDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</profile>
 ```
 
 ## 📚 Documentation
