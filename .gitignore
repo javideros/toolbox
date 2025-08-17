@@ -1,14 +1,32 @@
-/target/
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# IDE
 .idea/
-.vscode/
-.settings
-.project
-.classpath
-
+*.iws
 *.iml
-.DS_Store
+*.ipr
+.vscode/
 
-# The following files are generated/updated by vaadin-maven-plugin
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# E2E Testing
+e2e-tests/node/
+e2e-tests/node_modules/
+e2e-tests/test-results/
+e2e-tests/playwright-report/
+e2e-tests/package-lock.json
+test-results/
+
+# Frontend build artifacts
+frontend/generated/
 node_modules/
-src/main/frontend/generated/
-vite.generated.ts
+package-lock.json
