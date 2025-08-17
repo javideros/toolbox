@@ -1,0 +1,79 @@
+# Integration Labels
+- name: "vaadin"
+  color: "00B4F0"
+  description: "Issues related to Vaadin components or framework"
+
+- name: "shadcn-ui"
+  color: "000000"
+  description: "Issues related to shadcn/ui components"
+
+- name: "integration"
+  color: "7B68EE"
+  description: "Issues related to Vaadin + shadcn/ui integration"
+
+- name: "rbac"
+  color: "FF6B6B"
+  description: "Issues related to Role-Based Access Control system"
+
+- name: "theme"
+  color: "4ECDC4"
+  description: "Issues related to dark/light mode theming"
+
+- name: "responsive"
+  color: "45B7D1"
+  description: "Issues related to responsive design"
+
+- name: "accessibility"
+  color: "96CEB4"
+  description: "Issues related to accessibility features"
+
+# Type Labels
+- name: "bug"
+  color: "d73a4a"
+  description: "Something isn't working"
+
+- name: "enhancement"
+  color: "a2eeef"
+  description: "New feature or request"
+
+- name: "documentation"
+  color: "0075ca"
+  description: "Improvements or additions to documentation"
+
+- name: "testing"
+  color: "1d76db"
+  description: "Issues related to testing"
+
+- name: "performance"
+  color: "fbca04"
+  description: "Performance improvements"
+
+- name: "security"
+  color: "b60205"
+  description: "Security related issues"
+
+# Priority Labels
+- name: "priority: high"
+  color: "d93f0b"
+  description: "High priority issue"
+
+- name: "priority: medium"
+  color: "fbca04"
+  description: "Medium priority issue"
+
+- name: "priority: low"
+  color: "0e8a16"
+  description: "Low priority issue"
+
+# Status Labels
+- name: "good first issue"
+  color: "7057ff"
+  description: "Good for newcomers"
+
+- name: "help wanted"
+  color: "008672"
+  description: "Extra attention is needed"
+
+- name: "dependencies"
+  color: "0366d6"
+  description: "Pull requests that update a dependency file"

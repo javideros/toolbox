@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        
+    - name: Build production
+      run: ./mvnw -Pproduction package
+      
+    - name: Run tests
+      run: ./mvnw test
+      
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          ## Vaadin + shadcn/ui Integration Framework ${{ github.ref }}
+          
+          ### 🎯 Framework Capabilities
+          - Complete Vaadin + shadcn/ui integration
+          - RBAC system with screen-level permissions
+          - Responsive design with dark/light mode
+          - E2E testing with Playwright
+          
+          ### 📦 Artifacts
+          - Production JAR ready for deployment
+          - Complete source code with documentation
+          
+          ### 🚀 Quick Start
+          ```bash
+          git clone https://github.com/javideros/toolbox.git
+          cd toolbox
+          ./mvnw spring-boot:run
+          ```
+          
+          Open http://localhost:8080 and login with `admin`/`123` or `user`/`123`
+        draft: false
+        prerelease: false
+        
+    - name: Upload JAR
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: target/toolbox-1.0-SNAPSHOT.jar
+        asset_name: vaadin-shadcn-framework.jar
+        asset_content_type: application/java-archive
