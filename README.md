@@ -279,3 +279,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - [shadcn/ui](https://ui.shadcn.com/) - Beautiful React components
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
 - [Radix UI](https://www.radix-ui.com/) - Low-level UI primitives<!-- Updated Sun Aug 17 18:30:47 EDT 2025 -->
+
