@@ -1,7 +1,7 @@
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 import { Grid, GridColumn, TextField } from '@vaadin/react-components';
 import { Button } from '../components/ui/button';
-import { DatePicker } from '../components/ui/date-picker';
+
 import { 
   Breadcrumb,
   BreadcrumbList,
@@ -66,12 +66,13 @@ function TaskEntryForm(props: TaskEntryFormProps) {
         value={description.value}
         onValueChanged={(evt) => (description.value = evt.detail.value)}
       />
-      <DatePicker
-        placeholder="Due date"
-        value={dueDate.value ? new Date(dueDate.value) : undefined}
-        onChange={(date) => (dueDate.value = date ? date.toISOString().split('T')[0] : undefined)}
+      <TextField
+        placeholder="Due date (YYYY-MM-DD)"
+        value={dueDate.value || ''}
+        onValueChanged={(evt) => (dueDate.value = evt.detail.value)}
         className="w-full sm:w-[200px]"
         aria-label="Task due date"
+        type="date"
       />
       <Button 
         onClick={createTask} 
