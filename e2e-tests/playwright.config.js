@@ -22,7 +22,7 @@ module.exports = defineConfig({
     },
   ],
   webServer: {
-    command: 'cd .. && ./mvnw spring-boot:run',
+    command: 'cd .. && mvn spring-boot:run -Ph2',
     url: 'http://localhost:8080',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
