@@ -1,0 +1,22 @@
+name: "CodeQL Config"
+
+disable-default-queries: false
+
+queries:
+  - uses: security-extended
+  - uses: security-and-quality
+
+paths-ignore:
+  - "target/**"
+  - "e2e-tests/node_modules/**"
+  - "e2e-tests/test-results/**"
+  - "e2e-tests/playwright-report/**"
+  - "src/main/frontend/generated/**"
+  - "**/*.generated.*"
+  - "**/*.min.js"
+  - "**/node_modules/**"
+
+paths:
+  - "src/main/java/**"
+  - "src/main/frontend/**"
+  - "e2e-tests/tests/**"
