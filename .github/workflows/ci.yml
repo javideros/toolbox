@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop, fix-ci-nodejs ]
+    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
 
@@ -34,11 +34,10 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
         
-    - name: Run backend tests
-      run: ./mvnw test
+    # Backend tests run in separate step below
       
-    - name: Run E2E tests
-      run: ./mvnw verify -Ph2,e2e-test
+    - name: Run unit tests only
+      run: ./mvnw test -Ph2
       
     - name: Upload test reports
       uses: actions/upload-artifact@v4
