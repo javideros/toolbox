@@ -48,3 +48,4 @@ jobs:
       with:
         category: "/language:${{matrix.language}}"
         upload-database: false
+        skip-queries: true
