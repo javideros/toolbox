@@ -66,13 +66,13 @@ function TaskEntryForm(props: TaskEntryFormProps) {
         value={description.value}
         onValueChanged={(evt) => (description.value = evt.detail.value)}
       />
-      <TextField
-        placeholder="Due date (YYYY-MM-DD)"
-        value={dueDate.value || ''}
-        onValueChanged={(evt) => (dueDate.value = evt.detail.value)}
-        className="w-full sm:w-[200px]"
-        aria-label="Task due date"
+      <input
         type="date"
+        placeholder="Due date"
+        value={dueDate.value || ''}
+        onChange={(evt) => (dueDate.value = evt.target.value)}
+        className="w-full sm:w-[200px] px-3 py-2 border border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-md"
+        aria-label="Task due date"
       />
       <Button 
         onClick={createTask} 
