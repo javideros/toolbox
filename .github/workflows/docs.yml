@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -33,7 +33,8 @@ jobs:
       - name: Create docs structure
         run: |
           mkdir -p docs
-          cp README.md docs/index.md
+          cp index.html docs/
+          cp README.md docs/
           cp ARCHITECTURE.md docs/
           cp CODE_INSIGHTS.md docs/
           cp RBAC_PERMISSIONS.md docs/

@@ -152,6 +152,10 @@ function UserMenu() {
   );
 }
 
+export const config = {
+  menu: { exclude: true },
+};
+
 export default function MainLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   useKeyboardShortcuts(); // Enable keyboard shortcuts
