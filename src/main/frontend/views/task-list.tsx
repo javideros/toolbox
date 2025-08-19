@@ -17,6 +17,7 @@ import handleError from 'Frontend/views/_ErrorHandler';
 import { useGridDataProvider } from '@vaadin/hilla-react-crud';
 import { ScreenHelp } from '../components/screen-help';
 import { toast } from 'sonner';
+import { CheckCircle, AlertCircle, Info, X } from 'lucide-react';
 
 export const config: ViewConfig = {
   title: 'Task List',
@@ -45,6 +46,17 @@ function TaskEntryForm(props: TaskEntryFormProps) {
   const description = useSignal('');
   const dueDate = useSignal<string | undefined>('');
   const createTask = async () => {
+    if (!description.value.trim()) {
+      toast.error('Task description required', {
+        description: 'Please enter a description for your task',
+        icon: <AlertCircle className="h-4 w-4" />,
+        duration: 3000,
+      });
+      return;
+    }
+
+    const taskDescription = description.value;
+    
     try {
       await TaskService.createTask(description.value, dueDate.value);
       if (props.onTaskCreated) {
@@ -52,7 +64,12 @@ function TaskEntryForm(props: TaskEntryFormProps) {
       }
       description.value = '';
       dueDate.value = undefined;
-      toast.success('Task added');
+      
+      toast.success('Task created successfully!', {
+        description: `"${taskDescription}" has been added to your task list`,
+        icon: <CheckCircle className="h-4 w-4" />,
+        duration: 3000,
+      });
     } catch (error) {
       handleError(error);
     }
