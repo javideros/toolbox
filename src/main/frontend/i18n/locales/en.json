@@ -1,0 +1,54 @@
+{
+  "app": {
+    "title": "Vaadin + shadcn/ui Framework",
+    "description": "Modern full-stack application framework"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "taskList": "Task List",
+    "settings": "Settings",
+    "logout": "Logout",
+    "home": "Home"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to your dashboard",
+    "quickActions": "Quick Actions",
+    "recentActivity": "Recent Activity",
+    "statistics": "Statistics"
+  },
+  "breadcrumb": {
+    "dashboard": "Dashboard",
+    "taskList": "Task List"
+  },
+  "tasks": {
+    "title": "Task List",
+    "create": "Create",
+    "description": "Description",
+    "dueDate": "Due Date",
+    "created": "Created",
+    "placeholder": "What do you want to do?",
+    "dueDatePlaceholder": "Due date",
+    "never": "Never",
+    "createSuccess": "Task created successfully!",
+    "createSuccessDesc": "\"{description}\" has been added to your task list",
+    "validationRequired": "Task description required",
+    "validationRequiredDesc": "Please enter a description for your task"
+  },
+  "auth": {
+    "login": "Login",
+    "username": "Username",
+    "password": "Password",
+    "loginButton": "Sign In"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  }
+}
