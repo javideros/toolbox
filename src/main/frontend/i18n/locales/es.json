@@ -1,0 +1,42 @@
+{
+  "app": {
+    "title": "Framework Vaadin + shadcn/ui",
+    "description": "Framework de aplicación full-stack moderno"
+  },
+  "nav": {
+    "dashboard": "Panel de Control",
+    "taskList": "Lista de Tareas",
+    "settings": "Configuración",
+    "logout": "Cerrar Sesión"
+  },
+  "tasks": {
+    "title": "Lista de Tareas",
+    "create": "Crear",
+    "description": "Descripción",
+    "dueDate": "Fecha Límite",
+    "created": "Creado",
+    "placeholder": "¿Qué quieres hacer?",
+    "dueDatePlaceholder": "Fecha límite",
+    "never": "Nunca",
+    "createSuccess": "¡Tarea creada exitosamente!",
+    "createSuccessDesc": "\"{description}\" ha sido añadida a tu lista de tareas",
+    "validationRequired": "Descripción de tarea requerida",
+    "validationRequiredDesc": "Por favor ingresa una descripción para tu tarea"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "loginButton": "Entrar"
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito"
+  }
+}

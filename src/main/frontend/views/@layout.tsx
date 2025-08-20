@@ -15,6 +15,7 @@ import { useAuth } from 'Frontend/security/auth';
 import { AppConfigService, DashboardConfigService } from 'Frontend/generated/endpoints';
 import { ThemeProvider } from '../components/theme-provider';
 import { ModeToggle } from '../components/mode-toggle';
+import { LanguageSwitcher } from '../components/language-switcher';
 import { Button } from '../components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../components/ui/dropdown-menu';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../components/ui/sidebar';
@@ -129,6 +130,7 @@ function UserMenu() {
   return (
     <SidebarFooter>
       <div className="flex flex-col gap-1">
+        <LanguageSwitcher />
         <ModeToggle data-theme-toggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -159,6 +161,12 @@ export const config = {
 export default function MainLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   useKeyboardShortcuts(); // Enable keyboard shortcuts
+  
+  // Initialize locale
+  useEffect(() => {
+    const savedLocale = localStorage.getItem('locale') || 'en';
+    document.documentElement.lang = savedLocale;
+  }, []);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
