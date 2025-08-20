@@ -3,7 +3,12 @@ package com.example.application.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Common security configuration that enables method-level security.
@@ -79,5 +84,45 @@ class CommonSecurityConfig {
     @Bean
     public CurrentUser currentUser(SecurityContextHolderStrategy securityContextHolderStrategy) {
         return new CurrentUser(securityContextHolderStrategy);
+    }
+
+    @Autowired
+    private CsrfTokenRepository csrfTokenRepository;
+
+    /**
+     * Configures comprehensive security headers for the application.
+     * Includes CSP, HSTS, XSS protection, and other security measures.
+     */
+    @Bean
+    public void configureSecurityHeaders(HttpSecurity http) throws Exception {
+        http.headers(headers -> headers
+            // Content Security Policy - restrictive but allows Vaadin functionality
+            .contentSecurityPolicy("default-src 'self'; " +
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+                "style-src 'self' 'unsafe-inline'; " +
+                "img-src 'self' data: https:; " +
+                "font-src 'self' data:; " +
+                "connect-src 'self'; " +
+                "frame-ancestors 'none'").and()
+            
+            // Prevent clickjacking
+            .frameOptions().deny()
+            
+            // Prevent MIME type sniffing
+            .contentTypeOptions().and()
+            
+            // XSS Protection
+            .addHeaderWriter(new XXssProtectionHeaderWriter())
+            
+            // Referrer Policy
+            .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN).and()
+            
+            // HSTS for HTTPS enforcement
+            .httpStrictTransportSecurity(hstsConfig -> hstsConfig
+                .maxAgeInSeconds(31536000) // 1 year
+                .includeSubDomains(true))
+        )
+        // CSRF Protection with custom repository
+        .csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository));
     }
 }
