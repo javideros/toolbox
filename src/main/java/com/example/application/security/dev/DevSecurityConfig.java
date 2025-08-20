@@ -16,6 +16,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 
 class SecurityConfigurationException extends RuntimeException {
     public SecurityConfigurationException(String message) {
@@ -57,6 +59,8 @@ class SecurityConfigurationException extends RuntimeException {
 class DevSecurityConfig {
 
     private static final Logger log = LoggerFactory.getLogger(DevSecurityConfig.class);
+    
+
 
     DevSecurityConfig(Environment environment) {
         if (!isRunningLocally(environment)) {
@@ -72,8 +76,16 @@ class DevSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) {
         try {
-            return http.with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(DevLoginView.LOGIN_PATH))
-                    .build();
+            return http
+                .headers(headers -> headers
+                    // Basic security headers only - minimal CSP for Vaadin compatibility
+                    .frameOptions().sameOrigin()
+                    .contentTypeOptions().and()
+                    .addHeaderWriter(new XXssProtectionHeaderWriter())
+                    .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+                )
+                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(DevLoginView.LOGIN_PATH))
+                .build();
         } catch (Exception e) {
             throw new SecurityConfigurationException("Failed to configure security filter chain: " + e.getMessage());
         }
