@@ -1,5 +1,6 @@
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { useTranslation } from '../i18n';
 import { 
   Breadcrumb,
   BreadcrumbList,
@@ -29,6 +30,7 @@ const fallbackTiles = [
 ];
 
 export default function MainView() {
+  const { i18n } = useTranslation();
   const [tiles, setTiles] = useState<any[]>(fallbackTiles);
 
   useEffect(() => {
@@ -51,15 +53,15 @@ export default function MainView() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbPage>Dashboard</BreadcrumbPage>
+            <BreadcrumbPage>{i18n.dashboard.title}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
       
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome to your application dashboard</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">{i18n.dashboard.title}</h1>
+          <p className="text-muted-foreground">{i18n.dashboard.welcome}</p>
         </div>
         <ScreenHelp 
           title="Dashboard"

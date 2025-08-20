@@ -7,7 +7,19 @@
     "dashboard": "Panel de Control",
     "taskList": "Lista de Tareas",
     "settings": "Configuración",
-    "logout": "Cerrar Sesión"
+    "logout": "Cerrar Sesión",
+    "home": "Inicio"
+  },
+  "dashboard": {
+    "title": "Panel de Control",
+    "welcome": "Bienvenido a tu panel de control",
+    "quickActions": "Acciones Rápidas",
+    "recentActivity": "Actividad Reciente",
+    "statistics": "Estadísticas"
+  },
+  "breadcrumb": {
+    "dashboard": "Panel de Control",
+    "taskList": "Lista de Tareas"
   },
   "tasks": {
     "title": "Lista de Tareas",

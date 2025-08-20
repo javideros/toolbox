@@ -1,5 +1,6 @@
 import { Globe } from 'lucide-react';
 import { Button } from './ui/button';
+import { useTranslation } from '../i18n';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,11 +10,10 @@ import {
 import { supportedLocales } from '../i18n';
 
 export function LanguageSwitcher() {
-  const currentLocale = localStorage.getItem('locale') || 'en';
+  const { locale: currentLocale, setLocale } = useTranslation();
   
   const changeLanguage = (locale: string) => {
-    localStorage.setItem('locale', locale);
-    window.location.reload();
+    setLocale(locale);
   };
 
   const currentLang = supportedLocales.find(lang => lang.code === currentLocale);

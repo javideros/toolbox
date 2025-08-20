@@ -7,7 +7,19 @@
     "dashboard": "Dashboard",
     "taskList": "Task List",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "home": "Home"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to your dashboard",
+    "quickActions": "Quick Actions",
+    "recentActivity": "Recent Activity",
+    "statistics": "Statistics"
+  },
+  "breadcrumb": {
+    "dashboard": "Dashboard",
+    "taskList": "Task List"
   },
   "tasks": {
     "title": "Task List",

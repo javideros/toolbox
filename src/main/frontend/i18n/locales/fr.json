@@ -7,7 +7,19 @@
     "dashboard": "Tableau de Bord",
     "taskList": "Liste des Tâches",
     "settings": "Paramètres",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "home": "Accueil"
+  },
+  "dashboard": {
+    "title": "Tableau de Bord",
+    "welcome": "Bienvenue sur votre tableau de bord",
+    "quickActions": "Actions Rapides",
+    "recentActivity": "Activité Récente",
+    "statistics": "Statistiques"
+  },
+  "breadcrumb": {
+    "dashboard": "Tableau de Bord",
+    "taskList": "Liste des Tâches"
   },
   "tasks": {
     "title": "Liste des Tâches",

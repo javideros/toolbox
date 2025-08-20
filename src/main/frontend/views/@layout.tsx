@@ -16,6 +16,7 @@ import { AppConfigService, DashboardConfigService } from 'Frontend/generated/end
 import { ThemeProvider } from '../components/theme-provider';
 import { ModeToggle } from '../components/mode-toggle';
 import { LanguageSwitcher } from '../components/language-switcher';
+import { useTranslation } from '../i18n';
 import { Button } from '../components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../components/ui/dropdown-menu';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../components/ui/sidebar';
@@ -118,6 +119,7 @@ type UserMenuItem = MenuBarItem<{ action?: () => void | Promise<void> }>;
 
 function UserMenu() {
   const { logout, state } = useAuth();
+  const { i18n } = useTranslation();
 
   const fullName = state.user?.fullName;
   const pictureUrl = state.user?.pictureUrl;
@@ -145,7 +147,7 @@ function UserMenu() {
               </DropdownMenuItem>
             )}
             <DropdownMenuItem onClick={logout}>
-              Logout
+              {i18n.nav.logout}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
