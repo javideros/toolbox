@@ -18,6 +18,7 @@ import { useGridDataProvider } from '@vaadin/hilla-react-crud';
 import { ScreenHelp } from '../components/screen-help';
 import { toast } from 'sonner';
 import { CheckCircle, AlertCircle, Info, X } from 'lucide-react';
+import { useTranslation } from '../i18n';
 
 export const config: ViewConfig = {
   title: 'Task List',
@@ -43,12 +44,13 @@ type TaskEntryFormProps = {
 };
 
 function TaskEntryForm(props: TaskEntryFormProps) {
+  const { i18n } = useTranslation();
   const description = useSignal('');
   const dueDate = useSignal<string | undefined>('');
   const createTask = async () => {
     if (!description.value.trim()) {
-      toast.error('Task description required', {
-        description: 'Please enter a description for your task',
+      toast.error(i18n.tasks.validationRequired, {
+        description: i18n.tasks.validationRequiredDesc,
         icon: <AlertCircle className="h-4 w-4" />,
         duration: 3000,
       });
@@ -65,8 +67,8 @@ function TaskEntryForm(props: TaskEntryFormProps) {
       description.value = '';
       dueDate.value = undefined;
       
-      toast.success('Task created successfully!', {
-        description: `"${taskDescription}" has been added to your task list`,
+      toast.success(i18n.tasks.createSuccess, {
+        description: i18n.tasks.createSuccessDesc.replace('{description}', taskDescription),
         icon: <CheckCircle className="h-4 w-4" />,
         duration: 3000,
       });
@@ -77,15 +79,15 @@ function TaskEntryForm(props: TaskEntryFormProps) {
   return (
     <>
       <TextField
-        placeholder="What do you want to do?"
-        aria-label="Task description"
+        placeholder={i18n.tasks.placeholder}
+        aria-label={i18n.tasks.description}
         maxlength={255}
         className="flex-1 min-w-0"
         value={description.value}
         onValueChanged={(evt) => (description.value = evt.detail.value)}
       />
       <DatePicker
-        placeholder="Due date"
+        placeholder={i18n.tasks.dueDatePlaceholder}
         value={dueDate.value ? new Date(dueDate.value) : undefined}
         onChange={(date) => (dueDate.value = date ? date.toISOString().split('T')[0] : undefined)}
         className="w-full sm:w-[200px]"
@@ -93,16 +95,17 @@ function TaskEntryForm(props: TaskEntryFormProps) {
       <Button 
         onClick={createTask} 
         className="w-full sm:w-auto"
-        aria-label="Create new task"
+        aria-label={i18n.tasks.create}
         disabled={!description.value.trim()}
       >
-        Create
+        {i18n.tasks.create}
       </Button>
     </>
   );
 }
 
 export default function TaskListView() {
+  const { i18n } = useTranslation();
   const dataProvider = useGridDataProvider(TaskService.list);
 
   return (
@@ -110,16 +113,16 @@ export default function TaskListView() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
+            <BreadcrumbLink href="/">{i18n.breadcrumb.dashboard}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Task List</BreadcrumbPage>
+            <BreadcrumbPage>{i18n.breadcrumb.taskList}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl sm:text-3xl font-bold">Task List</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">{i18n.tasks.title}</h1>
         <ScreenHelp 
           title="Task List"
           content={
@@ -163,15 +166,15 @@ export default function TaskListView() {
       </section>
       <div className="overflow-x-auto" role="region" aria-label="Tasks table">
         <Grid dataProvider={dataProvider} className="min-w-full" aria-label="List of tasks">
-          <GridColumn path="description" header="Description" className="min-w-[200px]" />
-          <GridColumn path="dueDate" header="Due Date" className="min-w-[120px]">
+          <GridColumn path="description" header={i18n.tasks.description} className="min-w-[200px]" />
+          <GridColumn path="dueDate" header={i18n.tasks.dueDate} className="min-w-[120px]">
             {({ item }) => (
               <span aria-label={item.dueDate ? `Due ${dateFormatter.format(new Date(item.dueDate))}` : 'No due date'}>
-                {item.dueDate ? dateFormatter.format(new Date(item.dueDate)) : 'Never'}
+                {item.dueDate ? dateFormatter.format(new Date(item.dueDate)) : i18n.tasks.never}
               </span>
             )}
           </GridColumn>
-          <GridColumn path="creationDate" header="Created" className="min-w-[140px]">
+          <GridColumn path="creationDate" header={i18n.tasks.created} className="min-w-[140px]">
             {({ item }) => (
               <span aria-label={`Created ${dateTimeFormatter.format(new Date(item.creationDate))}`}>
                 {dateTimeFormatter.format(new Date(item.creationDate))}
