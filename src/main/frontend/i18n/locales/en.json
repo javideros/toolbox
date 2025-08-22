@@ -19,7 +19,16 @@
   },
   "breadcrumb": {
     "dashboard": "Dashboard",
-    "taskList": "Task List"
+    "taskList": "Task List",
+    "aiChat": "AI Chat"
+  },
+  "ai": {
+    "title": "AI Assistant",
+    "description": "Chat with Claude about your code and framework",
+    "analyzeProject": "Analyze Project",
+    "placeholder": "Ask Claude about your code, architecture, or best practices...",
+    "startConversation": "Start a conversation with Claude AI",
+    "askAbout": "Ask about code, architecture, or framework best practices"
   },
   "tasks": {
     "title": "Task List",
