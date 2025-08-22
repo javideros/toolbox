@@ -179,7 +179,7 @@ export default function AiChatView() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Bot className="h-5 w-5" />
-            Claude AI Assistant
+            AI Code Assistant
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-1 flex flex-col">

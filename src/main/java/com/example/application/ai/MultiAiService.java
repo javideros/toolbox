@@ -34,8 +34,9 @@ public class MultiAiService {
             String projectContext = mcpCoordinator.getFullProjectContext();
             
             SystemMessage systemMessage = new SystemMessage(
-                "You are an AI assistant for a Vaadin + shadcn/ui framework. " +
-                "Help with code analysis, suggestions, and framework guidance.\n\n" +
+                "You are an AI code assistant that helps with software development. " +
+                "Provide code analysis, suggestions, and technical guidance. " +
+                "Generate clean, efficient code and explain best practices.\n\n" +
                 "Project Context:\n" + projectContext
             );
 
@@ -58,8 +59,8 @@ public class MultiAiService {
 
     private String getProviderNotAvailableMessage(AiProvider provider) {
         return switch (provider) {
-            case CLAUDE -> "⚠️ **Claude AI Not Available**\n\n" +
-                          "To use Claude AI:\n" +
+            case CLAUDE -> "⚠️ **AI Provider Not Available**\n\n" +
+                          "To use this AI provider:\n" +
                           "1. Get API key from https://console.anthropic.com\n" +
                           "2. Set: `export ANTHROPIC_API_KEY=your_key_here`\n" +
                           "3. Restart application\n\n" +
