@@ -21,18 +21,26 @@ public class ChatController {
      * Sends a message to the specified AI provider.
      * 
      * @param request contains the message and provider selection
-     * @return AI response or error message
+     * @return AI response or generic error message
      */
     @PostMapping("/message")
     public String sendMessage(@RequestBody ChatRequest request) {
-        AiProvider provider = AiProvider.valueOf(request.provider());
-        return multiAiService.chat(request.message(), provider);
+        try {
+            AiProvider provider = AiProvider.valueOf(request.provider());
+            return multiAiService.chat(request.message(), provider);
+        } catch (Exception e) {
+            return "Unable to process your request. Please try again later.";
+        }
     }
 
     @PostMapping("/analyze")
     public String analyzeCode(@RequestBody AnalyzeRequest request) {
-        AiProvider provider = AiProvider.valueOf(request.provider());
-        return multiAiService.analyzeCode(request.code(), request.context(), provider);
+        try {
+            AiProvider provider = AiProvider.valueOf(request.provider());
+            return multiAiService.analyzeCode(request.code(), request.context(), provider);
+        } catch (Exception e) {
+            return "Unable to analyze code. Please try again later.";
+        }
     }
     
     public record ChatRequest(String message, String provider) {}
@@ -40,11 +48,19 @@ public class ChatController {
     
     @PostMapping("/query-db")
     public String queryDatabase(@RequestBody String query) {
-        return mcpCoordinator.queryDatabase(query);
+        try {
+            return mcpCoordinator.queryDatabase(query);
+        } catch (Exception e) {
+            return "Unable to query database. Please try again later.";
+        }
     }
     
     @GetMapping("/context/{type}")
     public String getContext(@PathVariable String type) {
-        return mcpCoordinator.getSpecificContext(type);
+        try {
+            return mcpCoordinator.getSpecificContext(type);
+        } catch (Exception e) {
+            return "Unable to retrieve context information.";
+        }
     }
 }
