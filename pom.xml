@@ -90,11 +90,13 @@
             <artifactId>spring-ai-anthropic-spring-boot-starter</artifactId>
             <version>1.0.0-M3</version>
         </dependency>
+        <!-- Azure OpenAI - Commented out to prevent startup issues
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-azure-openai-spring-boot-starter</artifactId>
             <version>1.0.0-M3</version>
         </dependency>
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>

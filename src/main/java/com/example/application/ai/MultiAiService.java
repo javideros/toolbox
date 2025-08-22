@@ -1,7 +1,7 @@
 package com.example.application.ai;
 
 import org.springframework.ai.anthropic.AnthropicChatModel;
-import org.springframework.ai.azure.openai.AzureOpenAiChatModel;
+// import org.springframework.ai.azure.openai.AzureOpenAiChatModel;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
@@ -18,8 +18,8 @@ public class MultiAiService {
     @Autowired(required = false)
     private AnthropicChatModel anthropicChatModel;
     
-    @Autowired(required = false)
-    private AzureOpenAiChatModel azureChatModel;
+    // @Autowired(required = false)
+    // private AzureOpenAiChatModel azureChatModel;
     
     @Autowired
     private McpCoordinator mcpCoordinator;
@@ -52,7 +52,7 @@ public class MultiAiService {
     private ChatModel getChatModel(AiProvider provider) {
         return switch (provider) {
             case CLAUDE -> anthropicChatModel;
-            case AZURE_OPENAI -> azureChatModel;
+            case AZURE_OPENAI -> null; // azureChatModel;
         };
     }
 
