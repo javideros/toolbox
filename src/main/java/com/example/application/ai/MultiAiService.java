@@ -12,6 +12,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service for handling multiple AI providers in the chat system.
+ * Supports different AI providers like Anthropic Claude and Azure OpenAI,
+ * providing a unified interface for chat interactions and code analysis.
+ */
 @Service
 public class MultiAiService {
 
@@ -24,6 +29,13 @@ public class MultiAiService {
     @Autowired
     private McpCoordinator mcpCoordinator;
 
+    /**
+     * Sends a chat message to the specified AI provider.
+     * 
+     * @param userMessage the user's message to send to the AI
+     * @param provider the AI provider to use for the chat
+     * @return the AI's response or an error message
+     */
     public String chat(String userMessage, AiProvider provider) {
         try {
             ChatModel chatModel = getChatModel(provider);

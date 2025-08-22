@@ -3,6 +3,10 @@ package com.example.application.ai;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller for AI chat functionality.
+ * Provides endpoints for sending messages to AI providers and querying project context.
+ */
 @RestController
 @RequestMapping("/api/chat")
 public class ChatController {
@@ -13,6 +17,12 @@ public class ChatController {
     @Autowired
     private McpCoordinator mcpCoordinator;
 
+    /**
+     * Sends a message to the specified AI provider.
+     * 
+     * @param request contains the message and provider selection
+     * @return AI response or error message
+     */
     @PostMapping("/message")
     public String sendMessage(@RequestBody ChatRequest request) {
         AiProvider provider = AiProvider.valueOf(request.provider());

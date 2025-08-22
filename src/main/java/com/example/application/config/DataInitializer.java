@@ -16,6 +16,11 @@ import java.util.List;
 import com.example.application.config.ScreensConfigService.ScreenConfig;
 import com.example.application.config.ScreensConfigService.PermissionConfig;
 
+/**
+ * Initializes application data on startup including roles, users, functional areas, and permissions.
+ * This component runs once when the application starts and populates the database with default data
+ * if it doesn't already exist.
+ */
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -26,6 +31,15 @@ public class DataInitializer implements CommandLineRunner {
     private final PermissionService permissionService;
     private final ScreensConfigService screensConfigService;
 
+    /**
+     * Constructor for DataInitializer with required services.
+     * 
+     * @param functionalAreaService service for managing functional areas
+     * @param roleService service for managing roles
+     * @param userService service for managing users
+     * @param permissionService service for managing permissions
+     * @param screensConfigService service for screen configuration
+     */
     public DataInitializer(FunctionalAreaService functionalAreaService, RoleService roleService, UserService userService, PermissionService permissionService, ScreensConfigService screensConfigService) {
         this.functionalAreaService = functionalAreaService;
         this.roleService = roleService;
@@ -34,6 +48,13 @@ public class DataInitializer implements CommandLineRunner {
         this.screensConfigService = screensConfigService;
     }
 
+    /**
+     * Runs the data initialization process on application startup.
+     * Initializes roles, functional areas, users, and permissions if they don't exist.
+     * 
+     * @param args command line arguments (not used)
+     * @throws RuntimeException if initialization fails
+     */
     @Override
     @Transactional
     public void run(String... args) {

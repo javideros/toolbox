@@ -3,6 +3,11 @@ package com.example.application.ai;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Coordinator service for managing multiple MCP (Model Context Protocol) services.
+ * Provides unified access to project context, database information, and git data
+ * for AI assistants to understand the current development environment.
+ */
 @Service
 public class McpCoordinator {
 
@@ -15,6 +20,11 @@ public class McpCoordinator {
     @Autowired
     private McpGitService gitService;
 
+    /**
+     * Retrieves comprehensive project context including code structure, database schema, and git information.
+     * 
+     * @return formatted string containing all available project context
+     */
     public String getFullProjectContext() {
         StringBuilder fullContext = new StringBuilder();
         
