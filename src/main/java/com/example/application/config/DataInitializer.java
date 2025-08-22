@@ -87,6 +87,10 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
+    /**
+     * Initializes default system roles if none exist.
+     * Creates ADMINISTRATOR and USER roles with appropriate descriptions.
+     */
     private void initializeRoles() {
         initializeIfEmpty(roleService.count(), "role", () -> {
             createRole("ADMINISTRATOR", "System administrator with full access");
@@ -94,6 +98,10 @@ public class DataInitializer implements CommandLineRunner {
         }, roleService::count);
     }
 
+    /**
+     * Initializes default system users if none exist.
+     * Creates sample administrator and regular user accounts.
+     */
     private void initializeUsers() {
         initializeIfEmpty(userService.count(), "user", () -> {
             createUser("alice", "Alice Administrator", "alice@example.com", "ADMINISTRATOR");
@@ -101,16 +109,36 @@ public class DataInitializer implements CommandLineRunner {
         }, userService::count);
     }
 
+    /**
+     * Capitalizes the first letter of a string.
+     * 
+     * @param str the string to capitalize
+     * @return capitalized string or original if null/empty
+     */
     private String capitalize(String str) {
         if (str == null || str.isEmpty()) return str;
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
+    /**
+     * Creates and saves a new role.
+     * 
+     * @param name the role name
+     * @param description the role description
+     */
     private void createRole(String name, String description) {
         Role role = new Role(name, description);
         roleService.save(role);
     }
 
+    /**
+     * Creates a new user and assigns them to the specified role.
+     * 
+     * @param username the username for login
+     * @param fullName the user's full display name
+     * @param email the user's email address
+     * @param roleName the name of the role to assign to the user
+     */
     @Transactional
     private void createUser(String username, String fullName, String email, String roleName) {
         User user = new User(username, fullName, email);
@@ -129,6 +157,10 @@ public class DataInitializer implements CommandLineRunner {
         userService.save(user);
     }
 
+    /**
+     * Initializes default functional areas if none exist.
+     * Creates predefined business functional areas like Financial, Delivery, Warehouse, etc.
+     */
     private void initializeFunctionalAreas() {
         initializeIfEmpty(functionalAreaService.count(), "functional area", () -> {
             createFunctionalArea("FI", "Financial", "Financial operations and accounting");
@@ -144,6 +176,10 @@ public class DataInitializer implements CommandLineRunner {
         }, functionalAreaService::count);
     }
 
+    /**
+     * Initializes system permissions if none exist.
+     * Uses either configuration file or default fallback permissions.
+     */
     @Transactional
     private void initializePermissions() {
         initializeIfEmpty(permissionService.count(), "permission", () -> {
@@ -155,6 +191,10 @@ public class DataInitializer implements CommandLineRunner {
         }, permissionService::count);
     }
     
+    /**
+     * Loads permissions from the screens configuration file.
+     * Sets up role-based permissions for each configured screen.
+     */
     private void initializePermissionsFromConfig() {
         log.info("Loading permissions from configuration file...");
 
@@ -175,8 +215,14 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
+    /**
+     * Sets permissions for a specific role on a screen based on configuration.
+     * 
+     * @param screen the screen configuration containing permission settings
+     * @param roleOpt optional role to set permissions for
+     * @param roleName the name of the role for permission lookup
+     */
     private void setPermissionsForRole(ScreenConfig screen, java.util.Optional<Role> roleOpt, String roleName) {
-        // Set permissions for the given role
         if (roleOpt.isPresent()) {
             PermissionConfig permission = screen.getDefaultPermissions().get(roleName);
             if (permission != null) {
@@ -189,6 +235,10 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
     
+    /**
+     * Initializes default fallback permissions when configuration loading fails.
+     * Grants full access to all screens for the ADMINISTRATOR role.
+     */
     private void initializeDefaultPermissions() {
         log.info("Loading default permissions (fallback)...");
         
@@ -206,6 +256,13 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
+    /**
+     * Creates and saves a new functional area.
+     * 
+     * @param code the unique code for the functional area
+     * @param name the display name of the functional area
+     * @param description the description of the functional area's purpose
+     */
     private void createFunctionalArea(String code, String name, String description) {
         FunctionalArea area = new FunctionalArea();
         area.setCode(code);
