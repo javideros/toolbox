@@ -36,6 +36,15 @@ public class ClaudeAiService {
             
             return response.getResult().getOutput().getContent();
         } catch (Exception e) {
+            if (e.getMessage().contains("x-api-key header is required")) {
+                return "⚠️ **Claude AI Not Available**\n\n" +
+                       "To use Claude AI chat, you need to:\n" +
+                       "1. Get an API key from https://console.anthropic.com\n" +
+                       "2. Set environment variable: `export ANTHROPIC_API_KEY=your_key_here`\n" +
+                       "3. Restart the application\n\n" +
+                       "**Meanwhile, here's the project context:**\n\n" +
+                       mcpCoordinator.getFullProjectContext();
+            }
             return "Error: " + e.getMessage();
         }
     }
