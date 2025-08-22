@@ -24,10 +24,10 @@
   },
   "ai": {
     "title": "Assistant IA",
-    "description": "Chattez avec Claude sur votre code et framework",
+    "description": "Chattez avec l'IA sur votre code et développement",
     "analyzeProject": "Analyser le Projet",
-    "placeholder": "Demandez à Claude sur votre code, architecture ou meilleures pratiques...",
-    "startConversation": "Commencez une conversation avec Claude IA",
+    "placeholder": "Demandez sur votre code, architecture ou meilleures pratiques...",
+    "startConversation": "Commencez une conversation avec l'Assistant IA",
     "askAbout": "Posez des questions sur le code, l'architecture ou les meilleures pratiques"
   },
   "tasks": {

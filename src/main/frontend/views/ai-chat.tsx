@@ -153,7 +153,7 @@ export default function AiChatView() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="CLAUDE">Claude (Anthropic)</SelectItem>
+              <SelectItem value="CLAUDE">Anthropic Claude</SelectItem>
               <SelectItem value="AZURE_OPENAI">Azure OpenAI</SelectItem>
             </SelectContent>
           </Select>

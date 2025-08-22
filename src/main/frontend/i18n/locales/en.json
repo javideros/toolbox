@@ -24,10 +24,10 @@
   },
   "ai": {
     "title": "AI Assistant",
-    "description": "Chat with Claude about your code and framework",
+    "description": "Chat with AI about your code and development",
     "analyzeProject": "Analyze Project",
-    "placeholder": "Ask Claude about your code, architecture, or best practices...",
-    "startConversation": "Start a conversation with Claude AI",
+    "placeholder": "Ask about your code, architecture, or best practices...",
+    "startConversation": "Start a conversation with AI Assistant",
     "askAbout": "Ask about code, architecture, or framework best practices"
   },
   "tasks": {

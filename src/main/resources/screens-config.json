@@ -18,7 +18,7 @@
     {
       "id": 2,
       "title": "AI Chat",
-      "description": "Chat with Claude AI for code analysis and assistance",
+      "description": "Chat with AI for code analysis and assistance",
       "link": "/ai-chat",
       "icon": "vaadin:chat",
       "enabled": true,
