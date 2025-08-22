@@ -8,20 +8,25 @@ import org.springframework.web.bind.annotation.*;
 public class ChatController {
 
     @Autowired
-    private ClaudeAiService claudeAiService;
+    private MultiAiService multiAiService;
     
     @Autowired
     private McpCoordinator mcpCoordinator;
 
     @PostMapping("/message")
-    public String sendMessage(@RequestBody String message) {
-        return claudeAiService.chat(message);
+    public String sendMessage(@RequestBody ChatRequest request) {
+        AiProvider provider = AiProvider.valueOf(request.provider());
+        return multiAiService.chat(request.message(), provider);
     }
 
     @PostMapping("/analyze")
-    public String analyzeCode(@RequestParam String code, @RequestParam String context) {
-        return claudeAiService.analyzeCode(code, context);
+    public String analyzeCode(@RequestBody AnalyzeRequest request) {
+        AiProvider provider = AiProvider.valueOf(request.provider());
+        return multiAiService.analyzeCode(request.code(), request.context(), provider);
     }
+    
+    public record ChatRequest(String message, String provider) {}
+    public record AnalyzeRequest(String code, String context, String provider) {}
     
     @PostMapping("/query-db")
     public String queryDatabase(@RequestBody String query) {

@@ -12,7 +12,8 @@ import {
 } from '../components/ui/breadcrumb';
 // Using REST API instead of Hilla endpoints
 import { useTranslation } from '../i18n';
-import { Send, Bot, User, Code, Database, GitBranch } from 'lucide-react';
+import { Send, Bot, User, Code, Database, GitBranch, ChevronDown } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 
 export const config: ViewConfig = {
   menu: {
@@ -35,6 +36,7 @@ export default function AiChatView() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState('CLAUDE');
 
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
@@ -66,7 +68,7 @@ export default function AiChatView() {
       const response = await fetch('/api/chat/message', {
         method: 'POST',
         headers,
-        body: JSON.stringify(input),
+        body: JSON.stringify({ message: input, provider: selectedProvider }),
         credentials: 'same-origin',
       });
       
@@ -145,19 +147,31 @@ export default function AiChatView() {
           <h1 className="text-2xl sm:text-3xl font-bold">{i18n.ai.title}</h1>
           <p className="text-muted-foreground">{i18n.ai.description}</p>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={analyzeCurrentProject} variant="outline" className="flex items-center gap-2">
-            <Code className="h-4 w-4" />
-            {i18n.ai.analyzeProject}
-          </Button>
-          <Button onClick={analyzeDatabaseSchema} variant="outline" className="flex items-center gap-2">
-            <Database className="h-4 w-4" />
-            Analyze DB
-          </Button>
-          <Button onClick={queryDatabase} variant="outline" className="flex items-center gap-2">
-            <Database className="h-4 w-4" />
-            Query DB
-          </Button>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Select value={selectedProvider} onValueChange={setSelectedProvider}>
+            <SelectTrigger className="w-48">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="CLAUDE">Claude (Anthropic)</SelectItem>
+              <SelectItem value="AZURE_OPENAI">Azure OpenAI</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          <div className="flex gap-2">
+            <Button onClick={analyzeCurrentProject} variant="outline" className="flex items-center gap-2">
+              <Code className="h-4 w-4" />
+              {i18n.ai.analyzeProject}
+            </Button>
+            <Button onClick={analyzeDatabaseSchema} variant="outline" className="flex items-center gap-2">
+              <Database className="h-4 w-4" />
+              Analyze DB
+            </Button>
+            <Button onClick={queryDatabase} variant="outline" className="flex items-center gap-2">
+              <Database className="h-4 w-4" />
+              Query DB
+            </Button>
+          </div>
         </div>
       </div>
 
