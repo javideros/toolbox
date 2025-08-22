@@ -13,16 +13,16 @@ import java.util.List;
 public class ClaudeAiService {
 
     private final AnthropicChatModel chatModel;
-    private final McpCodeAnalysisService mcpService;
+    private final McpCoordinator mcpCoordinator;
 
-    public ClaudeAiService(AnthropicChatModel chatModel, McpCodeAnalysisService mcpService) {
+    public ClaudeAiService(AnthropicChatModel chatModel, McpCoordinator mcpCoordinator) {
         this.chatModel = chatModel;
-        this.mcpService = mcpService;
+        this.mcpCoordinator = mcpCoordinator;
     }
 
     public String chat(String userMessage) {
         try {
-            String projectContext = mcpService.getProjectContext();
+            String projectContext = mcpCoordinator.getFullProjectContext();
             
             SystemMessage systemMessage = new SystemMessage(
                 "You are an AI assistant for a Vaadin + shadcn/ui framework. " +

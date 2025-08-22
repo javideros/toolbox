@@ -9,6 +9,9 @@ public class ChatController {
 
     @Autowired
     private ClaudeAiService claudeAiService;
+    
+    @Autowired
+    private McpCoordinator mcpCoordinator;
 
     @PostMapping("/message")
     public String sendMessage(@RequestBody String message) {
@@ -18,5 +21,15 @@ public class ChatController {
     @PostMapping("/analyze")
     public String analyzeCode(@RequestParam String code, @RequestParam String context) {
         return claudeAiService.analyzeCode(code, context);
+    }
+    
+    @PostMapping("/query-db")
+    public String queryDatabase(@RequestBody String query) {
+        return mcpCoordinator.queryDatabase(query);
+    }
+    
+    @GetMapping("/context/{type}")
+    public String getContext(@PathVariable String type) {
+        return mcpCoordinator.getSpecificContext(type);
     }
 }

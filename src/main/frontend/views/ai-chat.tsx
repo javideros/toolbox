@@ -12,7 +12,7 @@ import {
 } from '../components/ui/breadcrumb';
 // Using REST API instead of Hilla endpoints
 import { useTranslation } from '../i18n';
-import { Send, Bot, User, Code } from 'lucide-react';
+import { Send, Bot, User, Code, Database, GitBranch } from 'lucide-react';
 
 export const config: ViewConfig = {
   menu: {
@@ -93,6 +93,28 @@ export default function AiChatView() {
     setInput(projectAnalysisPrompt);
   };
 
+  const analyzeDatabaseSchema = async () => {
+    const dbAnalysisPrompt = 
+      "Please analyze the current database schema and provide insights about:\n" +
+      "1. Table structure and relationships\n" +
+      "2. Data model design\n" +
+      "3. Potential optimizations\n" +
+      "4. Missing indexes or constraints";
+    
+    setInput(dbAnalysisPrompt);
+  };
+
+  const queryDatabase = async () => {
+    const queryPrompt = 
+      "I want to query the database. Please help me write SQL queries to:\n" +
+      "1. Explore the data\n" +
+      "2. Find specific information\n" +
+      "3. Generate reports\n" +
+      "Remember: Only SELECT queries are allowed for security.";
+    
+    setInput(queryPrompt);
+  };
+
   return (
     <main className="space-y-6 h-full flex flex-col">
       <Breadcrumb>
@@ -112,10 +134,20 @@ export default function AiChatView() {
           <h1 className="text-2xl sm:text-3xl font-bold">{i18n.ai.title}</h1>
           <p className="text-muted-foreground">{i18n.ai.description}</p>
         </div>
-        <Button onClick={analyzeCurrentProject} variant="outline" className="flex items-center gap-2">
-          <Code className="h-4 w-4" />
-          {i18n.ai.analyzeProject}
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={analyzeCurrentProject} variant="outline" className="flex items-center gap-2">
+            <Code className="h-4 w-4" />
+            {i18n.ai.analyzeProject}
+          </Button>
+          <Button onClick={analyzeDatabaseSchema} variant="outline" className="flex items-center gap-2">
+            <Database className="h-4 w-4" />
+            Analyze DB
+          </Button>
+          <Button onClick={queryDatabase} variant="outline" className="flex items-center gap-2">
+            <Database className="h-4 w-4" />
+            Query DB
+          </Button>
+        </div>
       </div>
 
       <Card className="flex-1 flex flex-col">
