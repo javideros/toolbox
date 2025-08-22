@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import com.example.application.config.ScreensConfigService.ScreenConfig;
+import com.example.application.config.ScreensConfigService.PermissionConfig;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -99,7 +102,7 @@ public class DataInitializer implements CommandLineRunner {
         
         // Get the saved role from database
         try {
-            var savedRoles = roleService.list(org.springframework.data.domain.Pageable.unpaged(), null);
+            List<Role> savedRoles = roleService.list(org.springframework.data.domain.Pageable.unpaged(), null);
             savedRoles.stream()
                 .filter(role -> roleName.equals(role.getName()))
                 .findFirst()
@@ -130,36 +133,35 @@ public class DataInitializer implements CommandLineRunner {
     
     private void initializePermissionsFromConfig() {
         log.info("Loading permissions from configuration file...");
-        
+
         try {
-            var screens = screensConfigService.getScreens();
-            var adminRole = roleService.findByName("ADMINISTRATOR");
-            var userRole = roleService.findByName("USER");
-            
-            for (var screen : screens) {
-                // Set permissions for ADMINISTRATOR role
-                if (adminRole.isPresent()) {
-                    var adminPermission = screen.getDefaultPermissions().get("ADMINISTRATOR");
-                    if (adminPermission != null) {
-                        permissionService.savePermission(adminRole.get().getId(), screen.getTitle(), 
-                            adminPermission.isCanRead(), adminPermission.isCanWrite());
-                    }
-                }
-                
-                // Set permissions for USER role
-                if (userRole.isPresent()) {
-                    var userPermission = screen.getDefaultPermissions().get("USER");
-                    if (userPermission != null) {
-                        permissionService.savePermission(userRole.get().getId(), screen.getTitle(), 
-                            userPermission.isCanRead(), userPermission.isCanWrite());
-                    }
-                }
+            List<ScreenConfig> screens = screensConfigService.getScreens();
+            java.util.Optional<Role> adminRole = roleService.findByName("ADMINISTRATOR");
+            java.util.Optional<Role> userRole = roleService.findByName("USER");
+
+            for (ScreenConfig screen : screens) {
+                setPermissionsForRole(screen, adminRole, "ADMINISTRATOR");
+                setPermissionsForRole(screen, userRole, "USER");
             }
-            
+
             log.info("Loaded permissions for {} screens from configuration", screens.size());
         } catch (Exception e) {
             log.error("Failed to load permissions from configuration: {}", e.getMessage());
             initializeDefaultPermissions();
+        }
+    }
+
+    private void setPermissionsForRole(ScreenConfig screen, java.util.Optional<Role> roleOpt, String roleName) {
+        // Set permissions for the given role
+        if (roleOpt.isPresent()) {
+            PermissionConfig permission = screen.getDefaultPermissions().get(roleName);
+            if (permission != null) {
+                permissionService.savePermission(
+                        roleOpt.get().getId(),
+                        screen.getTitle(),
+                        permission.isCanRead(),
+                        permission.isCanWrite());
+            }
         }
     }
     
@@ -167,7 +169,7 @@ public class DataInitializer implements CommandLineRunner {
         log.info("Loading default permissions (fallback)...");
         
         try {
-            var adminRole = roleService.findByName("ADMINISTRATOR");
+            java.util.Optional<Role> adminRole = roleService.findByName("ADMINISTRATOR");
                 
             if (adminRole.isPresent()) {
                 String[] screens = {"Task List", "Functional Areas", "Users", "Roles", "Permissions", "Analytics", "Reports", "Settings", "Reference"};
