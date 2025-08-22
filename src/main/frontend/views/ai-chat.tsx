@@ -223,7 +223,7 @@ export default function AiChatView() {
                 }
               }}
               placeholder={i18n.ai.placeholder}
-              className="flex-1 min-h-[60px] p-3 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+              className="flex-1 min-h-[60px] p-3 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground"
               disabled={loading}
             />
             <Button 
