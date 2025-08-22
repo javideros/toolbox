@@ -77,8 +77,11 @@ class DevSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) {
         try {
             return http
+                .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/api/chat/**").authenticated()
+                    .anyRequest().permitAll()
+                )
                 .headers(headers -> headers
-                    // Basic security headers only - minimal CSP for Vaadin compatibility
                     .frameOptions().sameOrigin()
                     .contentTypeOptions().and()
                     .addHeaderWriter(new XXssProtectionHeaderWriter())

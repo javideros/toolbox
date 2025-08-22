@@ -51,12 +51,23 @@ export default function AiChatView() {
     setLoading(true);
 
     try {
+      // Get CSRF token
+      const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
+      const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
+      
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (csrfToken && csrfHeader) {
+        headers[csrfHeader] = csrfToken;
+      }
+      
       const response = await fetch('/api/chat/message', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(input),
+        credentials: 'same-origin',
       });
       
       const responseText = await response.text();
