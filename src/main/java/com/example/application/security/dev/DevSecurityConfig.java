@@ -77,17 +77,19 @@ class DevSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) {
         try {
             return http
-                .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/chat/**").authenticated()
-                    .anyRequest().permitAll()
-                )
                 .headers(headers -> headers
                     .frameOptions().sameOrigin()
                     .contentTypeOptions().and()
                     .addHeaderWriter(new XXssProtectionHeaderWriter())
                     .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
                 )
-                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(DevLoginView.LOGIN_PATH))
+                .with(VaadinSecurityConfigurer.vaadin(), configurer -> 
+                    configurer
+                        .loginView(DevLoginView.LOGIN_PATH)
+                        .requestMatchers(matchers -> matchers
+                            .requestMatchers("/api/chat/**").authenticated()
+                        )
+                )
                 .build();
         } catch (Exception e) {
             throw new SecurityConfigurationException("Failed to configure security filter chain: " + e.getMessage());
