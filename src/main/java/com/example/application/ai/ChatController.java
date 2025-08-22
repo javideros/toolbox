@@ -2,7 +2,8 @@ package com.example.application.ai;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * REST controller for AI chat functionality.
  * Provides endpoints for sending messages to AI providers and querying project context.
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/chat")
 public class ChatController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
 
     @Autowired
     private MultiAiService multiAiService;
@@ -27,8 +30,16 @@ public class ChatController {
     public String sendMessage(@RequestBody ChatRequest request) {
         try {
             AiProvider provider = AiProvider.valueOf(request.provider());
-            return multiAiService.chat(request.message(), provider);
+            String response = multiAiService.chat(request.message(), provider);
+            if (response != null && (response.toLowerCase().contains("exception")
+                || response.toLowerCase().contains("error")
+                || response.toLowerCase().contains("stacktrace"))) {
+                logger.warn("AI provider returned error-like response: {}", response);
+                return "Unable to process your request. Please try again later.";
+            }
+            return response;
         } catch (Exception e) {
+            logger.error("Exception occurred while processing message", e);
             return "Unable to process your request. Please try again later.";
         }
     }
