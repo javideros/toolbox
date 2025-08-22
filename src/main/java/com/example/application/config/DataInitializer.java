@@ -60,24 +60,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         try {
             initializeRoles();
-            if (functionalAreaService.count() == 0) {
-                log.info("Initializing functional area data...");
-                
-                createFunctionalArea("FI", "Financial", "Financial operations and accounting");
-                createFunctionalArea("DE", "Delivery", "Package delivery and logistics");
-                createFunctionalArea("WH", "Warehouse", "Inventory management and storage");
-                createFunctionalArea("CS", "Customer Service", "Customer support and relations");
-                createFunctionalArea("OP", "Operations", "Daily operational activities");
-                createFunctionalArea("HR", "Human Resources", "Staff management and administration");
-                createFunctionalArea("IT", "Information Technology", "Technology support and systems");
-                createFunctionalArea("SE", "Security", "Facility and cargo security");
-                createFunctionalArea("QA", "Quality Assurance", "Quality control and compliance");
-                createFunctionalArea("MN", "Maintenance", "Equipment and facility maintenance");
-                
-                log.info("Functional area data initialized. Total count: {}", functionalAreaService.count());
-            } else {
-                log.info("Functional area data already exists. Count: {}", functionalAreaService.count());
-            }
+            initializeFunctionalAreas();
             initializeUsers();
             initializePermissions();
         } catch (Exception e) {
@@ -86,30 +69,41 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
-    private void initializeRoles() {
-        if (roleService.count() == 0) {
-            log.info("Initializing role data...");
-            
-            createRole("ADMINISTRATOR", "System administrator with full access");
-            createRole("USER", "Regular user with limited access");
-            
-            log.info("Role data initialized. Total count: {}", roleService.count());
+    /**
+     * Generic method to initialize data if it doesn't exist.
+     * 
+     * @param count current count of entities
+     * @param entityName name of the entity type for logging
+     * @param initializer runnable that performs the initialization
+     * @param countSupplier supplier that returns the final count
+     */
+    private void initializeIfEmpty(long count, String entityName, Runnable initializer, java.util.function.Supplier<Long> countSupplier) {
+        if (count == 0) {
+            log.info("Initializing {} data...", entityName);
+            initializer.run();
+            log.info("{} data initialized. Total count: {}", capitalize(entityName), countSupplier.get());
         } else {
-            log.info("Role data already exists. Count: {}", roleService.count());
+            log.info("{} data already exists. Count: {}", capitalize(entityName), count);
         }
     }
 
+    private void initializeRoles() {
+        initializeIfEmpty(roleService.count(), "role", () -> {
+            createRole("ADMINISTRATOR", "System administrator with full access");
+            createRole("USER", "Regular user with limited access");
+        }, roleService::count);
+    }
+
     private void initializeUsers() {
-        if (userService.count() == 0) {
-            log.info("Initializing user data...");
-            
+        initializeIfEmpty(userService.count(), "user", () -> {
             createUser("alice", "Alice Administrator", "alice@example.com", "ADMINISTRATOR");
             createUser("ursula", "Ursula User", "ursula@example.com", "USER");
-            
-            log.info("User data initialized. Total count: {}", userService.count());
-        } else {
-            log.info("User data already exists. Count: {}", userService.count());
-        }
+        }, userService::count);
+    }
+
+    private String capitalize(String str) {
+        if (str == null || str.isEmpty()) return str;
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
     private void createRole(String name, String description) {
@@ -135,21 +129,30 @@ public class DataInitializer implements CommandLineRunner {
         userService.save(user);
     }
 
+    private void initializeFunctionalAreas() {
+        initializeIfEmpty(functionalAreaService.count(), "functional area", () -> {
+            createFunctionalArea("FI", "Financial", "Financial operations and accounting");
+            createFunctionalArea("DE", "Delivery", "Package delivery and logistics");
+            createFunctionalArea("WH", "Warehouse", "Inventory management and storage");
+            createFunctionalArea("CS", "Customer Service", "Customer support and relations");
+            createFunctionalArea("OP", "Operations", "Daily operational activities");
+            createFunctionalArea("HR", "Human Resources", "Staff management and administration");
+            createFunctionalArea("IT", "Information Technology", "Technology support and systems");
+            createFunctionalArea("SE", "Security", "Facility and cargo security");
+            createFunctionalArea("QA", "Quality Assurance", "Quality control and compliance");
+            createFunctionalArea("MN", "Maintenance", "Equipment and facility maintenance");
+        }, functionalAreaService::count);
+    }
+
     @Transactional
     private void initializePermissions() {
-        if (permissionService.count() == 0) {
-            log.info("Initializing permission data...");
-            
+        initializeIfEmpty(permissionService.count(), "permission", () -> {
             if (screensConfigService.isLoadDefaultConfig()) {
                 initializePermissionsFromConfig();
             } else {
                 initializeDefaultPermissions();
             }
-            
-            log.info("Permission data initialized. Total count: {}", permissionService.count());
-        } else {
-            log.info("Permission data already exists. Count: {}", permissionService.count());
-        }
+        }, permissionService::count);
     }
     
     private void initializePermissionsFromConfig() {
