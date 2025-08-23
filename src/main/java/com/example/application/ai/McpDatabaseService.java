@@ -73,10 +73,15 @@ public class McpDatabaseService {
             
             for (String tableName : tableNames) {
                 try {
-                    Integer count = jdbcTemplate.queryForObject(
-                        "SELECT COUNT(*) FROM " + tableName, Integer.class
-                    );
-                    stats.append("- ").append(tableName).append(": ").append(count).append(" records\n");
+                    // Validate table name to prevent SQL injection
+                    if (isValidTableName(tableName)) {
+                        Integer count = jdbcTemplate.queryForObject(
+                            "SELECT COUNT(*) FROM " + sanitizeTableName(tableName), Integer.class
+                        );
+                        stats.append("- ").append(tableName).append(": ").append(count).append(" records\n");
+                    } else {
+                        stats.append("- ").append(tableName).append(": Invalid table name\n");
+                    }
                 } catch (Exception e) {
                     stats.append("- ").append(tableName).append(": Error reading count\n");
                 }
@@ -90,9 +95,9 @@ public class McpDatabaseService {
 
     public String queryDatabase(String query) {
         try {
-            // Security: Only allow SELECT queries
-            if (!query.trim().toUpperCase().startsWith("SELECT")) {
-                return "Only SELECT queries are allowed for security reasons";
+            // Security: Only allow SELECT queries and validate input
+            if (!isValidQuery(query)) {
+                return "Only safe SELECT queries are allowed for security reasons";
             }
             
             List<Map<String, Object>> results = jdbcTemplate.queryForList(query);
@@ -116,7 +121,60 @@ public class McpDatabaseService {
             
             return result.toString();
         } catch (Exception e) {
-            return "Query error: " + e.getMessage();
+            return "Unable to execute query. Please check your syntax.";
         }
+    }
+
+    /**
+     * Validates that the table name contains only safe characters.
+     * 
+     * @param tableName the table name to validate
+     * @return true if the table name is safe to use
+     */
+    private boolean isValidTableName(String tableName) {
+        return tableName != null && tableName.matches("^[a-zA-Z_][a-zA-Z0-9_]*$");
+    }
+
+    /**
+     * Sanitizes table name by removing any potentially dangerous characters.
+     * 
+     * @param tableName the table name to sanitize
+     * @return sanitized table name
+     */
+    private String sanitizeTableName(String tableName) {
+        return tableName.replaceAll("[^a-zA-Z0-9_]", "");
+    }
+
+    /**
+     * Validates that the query is safe to execute.
+     * 
+     * @param query the SQL query to validate
+     * @return true if the query is safe
+     */
+    private boolean isValidQuery(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return false;
+        }
+        
+        String upperQuery = query.trim().toUpperCase();
+        
+        // Only allow SELECT queries
+        if (!upperQuery.startsWith("SELECT")) {
+            return false;
+        }
+        
+        // Block dangerous keywords
+        String[] dangerousKeywords = {
+            "DROP", "DELETE", "UPDATE", "INSERT", "ALTER", "CREATE", 
+            "TRUNCATE", "EXEC", "EXECUTE", "--", "/*", "*/", ";"
+        };
+        
+        for (String keyword : dangerousKeywords) {
+            if (upperQuery.contains(keyword)) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }
