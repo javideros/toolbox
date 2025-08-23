@@ -48,8 +48,16 @@ public class ChatController {
     public String analyzeCode(@RequestBody AnalyzeRequest request) {
         try {
             AiProvider provider = AiProvider.valueOf(request.provider());
-            return multiAiService.analyzeCode(request.code(), request.context(), provider);
+            String response = multiAiService.analyzeCode(request.code(), request.context(), provider);
+            if (response != null && (response.toLowerCase().contains("exception")
+                    || response.toLowerCase().contains("error")
+                    || response.toLowerCase().contains("stacktrace"))) {
+                logger.warn("AI provider returned error-like response: {}", response);
+                return "Unable to analyze code. Please try again later.";
+            }
+            return response;
         } catch (Exception e) {
+            logger.error("Exception occurred while analyzing code", e);
             return "Unable to analyze code. Please try again later.";
         }
     }
