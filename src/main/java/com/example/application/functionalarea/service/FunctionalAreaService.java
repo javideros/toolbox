@@ -58,6 +58,17 @@ public class FunctionalAreaService extends CrudRepositoryService<FunctionalArea,
     @Override
     @Transactional
     public FunctionalArea save(FunctionalArea entity) {
+        performPermissionCheck();
+
+        if (entity.getId() == null) {
+            validateNewFunctionalArea(entity);
+        } else {
+            validateExistingFunctionalArea(entity);
+        }
+        return repository.save(entity);
+    }
+
+    private void performPermissionCheck() {
         // Skip permission check during system initialization
         try {
             userPermissionService.requireWritePermission("Functional Areas");
@@ -65,23 +76,30 @@ public class FunctionalAreaService extends CrudRepositoryService<FunctionalArea,
             // Allow save during startup when no user context exists
             log.debug("Bypassing permission check during system initialization");
         }
-        
-        if (entity.getId() == null) {
-            if (repository.existsByName(entity.getName())) {
-                throw new FunctionalAreaValidationException("Functional area with name '" + entity.getName() + "' already exists");
-            }
-            if (repository.existsByCode(entity.getCode())) {
-                throw new FunctionalAreaValidationException("Functional area with code '" + entity.getCode() + "' already exists");
-            }
-        } else {
-            if (repository.existsByNameAndIdNot(entity.getName(), entity.getId())) {
-                throw new FunctionalAreaValidationException("Functional area with name '" + entity.getName() + "' already exists");
-            }
-            if (repository.existsByCodeAndIdNot(entity.getCode(), entity.getId())) {
-                throw new FunctionalAreaValidationException("Functional area with code '" + entity.getCode() + "' already exists");
-            }
+    }
+
+    @Transactional(readOnly = true)
+    private void validateNewFunctionalArea(FunctionalArea entity) {
+        if (repository.existsByName(entity.getName())) {
+            throw new FunctionalAreaValidationException(
+                    "Functional area with name '" + entity.getName() + "' already exists");
         }
-        return repository.save(entity);
+        if (repository.existsByCode(entity.getCode())) {
+            throw new FunctionalAreaValidationException(
+                    "Functional area with code '" + entity.getCode() + "' already exists");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    private void validateExistingFunctionalArea(FunctionalArea entity) {
+        if (repository.existsByNameAndIdNot(entity.getName(), entity.getId())) {
+            throw new FunctionalAreaValidationException(
+                    "Functional area with name '" + entity.getName() + "' already exists");
+        }
+        if (repository.existsByCodeAndIdNot(entity.getCode(), entity.getId())) {
+            throw new FunctionalAreaValidationException(
+                    "Functional area with code '" + entity.getCode() + "' already exists");
+        }
     }
 
     @Override

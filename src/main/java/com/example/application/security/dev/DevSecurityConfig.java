@@ -17,7 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
-import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
+
 
 class SecurityConfigurationException extends RuntimeException {
     public SecurityConfigurationException(String message) {
@@ -81,10 +81,9 @@ class DevSecurityConfig {
                     .requestMatchers("/api/chat/**").authenticated()
                 )
                 .headers(headers -> headers
-                    .frameOptions().sameOrigin()
-                    .contentTypeOptions().and()
-                    .addHeaderWriter(new XXssProtectionHeaderWriter())
-                    .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+                    .frameOptions(frame -> frame.sameOrigin())
+                    .contentTypeOptions(contentTypeOptions -> contentTypeOptions.disable())
+                    .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 )
                 .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(DevLoginView.LOGIN_PATH))
                 .build();
