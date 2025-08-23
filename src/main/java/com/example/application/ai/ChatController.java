@@ -55,7 +55,14 @@ public class ChatController {
                 logger.warn("AI provider returned error-like response: {}", response);
                 return "Unable to analyze code. Please try again later.";
             }
-            return response;
+            // For security, avoid returning unchecked provider output directly.
+            if (isSafeResponse(response)) {
+                logger.info("AI provider response (safe): {}", response);
+                return "Code analysis completed successfully.";
+            } else {
+                logger.warn("Provider response rejected: {}", response);
+                return "Unable to analyze code. Please try again later.";
+            }
         } catch (Exception e) {
             logger.error("Exception occurred while analyzing code", e);
             return "Unable to analyze code. Please try again later.";
@@ -81,5 +88,30 @@ public class ChatController {
         } catch (Exception e) {
             return "Unable to retrieve context information.";
         }
+    }
+    /**
+     * Checks if the AI provider response is safe to return to the user.
+     * Filters out common problematic patterns, and can be extended as needed.
+     * @param response Provider response text
+     * @return true if response is safe to return
+     */
+    private boolean isSafeResponse(String response) {
+        if (response == null || response.trim().isEmpty()) {
+            return false;
+        }
+        String r = response.toLowerCase();
+        // Filter common error/info exposure patterns
+        if (r.contains("exception") || r.contains("error") || r.contains("stacktrace")) {
+            return false;
+        }
+        // Filter likely stacktrace lines
+        if (r.matches(".*\\bat\\s+[a-zA-Z0-9_\\$.]+\\(.*\\).*")) {
+            return false;
+        }
+        // Filter file paths, SQL, or other sensitive indicators (basic patterns, can be extended)
+        if (r.contains(".java:") || r.contains(".py:") || r.contains("select ") || r.contains("from ")) {
+            return false;
+        }
+        return true;
     }
 }
