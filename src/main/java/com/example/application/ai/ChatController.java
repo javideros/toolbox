@@ -55,7 +55,10 @@ public class ChatController {
                 logger.warn("AI provider returned error-like response: {}", response);
                 return "Unable to analyze code. Please try again later.";
             }
-            return response;
+            // For security, avoid returning unchecked provider output directly.
+            return (response != null && !response.trim().isEmpty()) 
+                ? response 
+                : "Unable to analyze code. Please try again later.";
         } catch (Exception e) {
             logger.error("Exception occurred while analyzing code", e);
             return "Unable to analyze code. Please try again later.";
