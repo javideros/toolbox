@@ -9,7 +9,8 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
-
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 @Service
 public class McpDatabaseService {
 
@@ -95,9 +96,33 @@ public class McpDatabaseService {
 
     public String queryDatabase(String query) {
         try {
-            // Security: Only allow SELECT queries and validate input
+            // Comprehensive security validation
             if (!isValidQuery(query)) {
                 return "Only safe SELECT queries are allowed for security reasons";
+            }
+            
+            // Additional pattern-based validation for extra security
+            String normalizedQuery = query.trim().toUpperCase();
+            Pattern selectPattern = Pattern.compile("^SELECT \\* FROM ([a-zA-Z0-9_]+)( WHERE .*)?$", Pattern.CASE_INSENSITIVE);
+            Matcher matcher = selectPattern.matcher(query.trim());
+            
+            if (!matcher.matches()) {
+                return "Only queries with format 'SELECT * FROM <table> [WHERE ...]' are allowed";
+            }
+            
+            String tableName = matcher.group(1);
+            
+            // Whitelist table names against actual database tables
+            List<String> allowedTables = jdbcTemplate.queryForList(
+                "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'PUBLIC'",
+                String.class
+            );
+            
+            boolean tableAllowed = allowedTables.stream()
+                .anyMatch(t -> t.equalsIgnoreCase(tableName));
+                
+            if (!tableAllowed) {
+                return "Table name is not recognized or allowed";
             }
             
             List<Map<String, Object>> results = jdbcTemplate.queryForList(query);
