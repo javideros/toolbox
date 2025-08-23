@@ -57,7 +57,8 @@ public class ChatController {
             }
             // For security, avoid returning unchecked provider output directly.
             if (isSafeResponse(response)) {
-                return response;
+                logger.info("AI provider response (safe): {}", response);
+                return "Code analysis completed successfully.";
             } else {
                 logger.warn("Provider response rejected: {}", response);
                 return "Unable to analyze code. Please try again later.";
