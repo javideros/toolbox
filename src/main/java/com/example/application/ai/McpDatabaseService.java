@@ -102,12 +102,11 @@ public class McpDatabaseService {
             }
             
             // Additional pattern-based validation for extra security
-            String normalizedQuery = query.trim().toUpperCase();
-            Pattern selectPattern = Pattern.compile("^SELECT \\* FROM ([a-zA-Z0-9_]+)( WHERE .*)?$", Pattern.CASE_INSENSITIVE);
+            Pattern selectPattern = Pattern.compile("^SELECT \\* FROM ([a-zA-Z0-9_]+)$", Pattern.CASE_INSENSITIVE);
             Matcher matcher = selectPattern.matcher(query.trim());
             
             if (!matcher.matches()) {
-                return "Only queries with format 'SELECT * FROM <table> [WHERE ...]' are allowed";
+                return "Only queries with format 'SELECT * FROM <table>' are allowed (no WHERE clauses for security)";
             }
             
             String tableName = matcher.group(1);
@@ -118,14 +117,22 @@ public class McpDatabaseService {
                 String.class
             );
             
-            boolean tableAllowed = allowedTables.stream()
-                .anyMatch(t -> t.equalsIgnoreCase(tableName));
+            String validatedTableName = null;
+            for (String allowedTable : allowedTables) {
+                if (allowedTable.equalsIgnoreCase(tableName)) {
+                    validatedTableName = allowedTable; // Use the exact table name from database
+                    break;
+                }
+            }
                 
-            if (!tableAllowed) {
+            if (validatedTableName == null) {
                 return "Table name is not recognized or allowed";
             }
             
-            List<Map<String, Object>> results = jdbcTemplate.queryForList(query);
+            // Safe reconstruction with validated table name only
+            String safeQuery = "SELECT * FROM " + validatedTableName;
+            
+            List<Map<String, Object>> results = jdbcTemplate.queryForList(safeQuery);
             
             if (results.isEmpty()) {
                 return "Query returned no results";
