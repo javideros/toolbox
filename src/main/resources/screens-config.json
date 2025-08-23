@@ -17,6 +17,21 @@
     },
     {
       "id": 2,
+      "title": "AI Chat",
+      "description": "Chat with AI for code analysis and assistance",
+      "link": "/ai-chat",
+      "icon": "vaadin:chat",
+      "enabled": true,
+      "showInMenu": true,
+      "showInDashboard": true,
+      "order": 2,
+      "defaultPermissions": {
+        "ADMINISTRATOR": { "canRead": true, "canWrite": true },
+        "USER": { "canRead": true, "canWrite": true }
+      }
+    },
+    {
+      "id": 3,
       "title": "Reference",
       "description": "System reference data management",
       "link": "/reference",
@@ -24,33 +39,18 @@
       "enabled": true,
       "showInMenu": true,
       "showInDashboard": true,
-      "order": 2,
+      "order": 3,
       "defaultPermissions": {
         "ADMINISTRATOR": { "canRead": true, "canWrite": true },
         "USER": { "canRead": true, "canWrite": false }
       }
     },
     {
-      "id": 3,
+      "id": 4,
       "title": "Functional Areas",
       "description": "Configure system functional areas",
       "link": "/functional-area",
       "icon": "vaadin:cogs",
-      "enabled": true,
-      "showInMenu": true,
-      "showInDashboard": true,
-      "order": 3,
-      "defaultPermissions": {
-        "ADMINISTRATOR": { "canRead": true, "canWrite": true },
-        "USER": { "canRead": false, "canWrite": false }
-      }
-    },
-    {
-      "id": 4,
-      "title": "Roles",
-      "description": "Role management and configuration",
-      "link": "/roles",
-      "icon": "vaadin:key",
       "enabled": true,
       "showInMenu": true,
       "showInDashboard": true,
@@ -62,10 +62,10 @@
     },
     {
       "id": 5,
-      "title": "Permissions",
-      "description": "Screen permissions management",
-      "link": "/permissions",
-      "icon": "vaadin:shield",
+      "title": "Roles",
+      "description": "Role management and configuration",
+      "link": "/roles",
+      "icon": "vaadin:key",
       "enabled": true,
       "showInMenu": true,
       "showInDashboard": true,
@@ -77,10 +77,10 @@
     },
     {
       "id": 6,
-      "title": "Users",
-      "description": "User management and administration",
-      "link": "/users",
-      "icon": "vaadin:users",
+      "title": "Permissions",
+      "description": "Screen permissions management",
+      "link": "/permissions",
+      "icon": "vaadin:shield",
       "enabled": true,
       "showInMenu": true,
       "showInDashboard": true,
@@ -92,25 +92,25 @@
     },
     {
       "id": 7,
-      "title": "Settings",
-      "description": "Application settings and configuration",
-      "link": "/settings",
-      "icon": "vaadin:cog-o",
+      "title": "Users",
+      "description": "User management and administration",
+      "link": "/users",
+      "icon": "vaadin:users",
       "enabled": true,
       "showInMenu": true,
       "showInDashboard": true,
       "order": 7,
       "defaultPermissions": {
         "ADMINISTRATOR": { "canRead": true, "canWrite": true },
-        "USER": { "canRead": true, "canWrite": false }
+        "USER": { "canRead": false, "canWrite": false }
       }
     },
     {
       "id": 8,
-      "title": "Analytics",
-      "description": "View system analytics and reports",
-      "link": "/analytics",
-      "icon": "vaadin:chart",
+      "title": "Settings",
+      "description": "Application settings and configuration",
+      "link": "/settings",
+      "icon": "vaadin:cog-o",
       "enabled": true,
       "showInMenu": true,
       "showInDashboard": true,
@@ -122,6 +122,21 @@
     },
     {
       "id": 9,
+      "title": "Analytics",
+      "description": "View system analytics and reports",
+      "link": "/analytics",
+      "icon": "vaadin:chart",
+      "enabled": true,
+      "showInMenu": true,
+      "showInDashboard": true,
+      "order": 9,
+      "defaultPermissions": {
+        "ADMINISTRATOR": { "canRead": true, "canWrite": true },
+        "USER": { "canRead": true, "canWrite": false }
+      }
+    },
+    {
+      "id": 10,
       "title": "Reports",
       "description": "Generate and view system reports",
       "link": "/reports",
@@ -129,7 +144,7 @@
       "enabled": true,
       "showInMenu": true,
       "showInDashboard": true,
-      "order": 9,
+      "order": 10,
       "defaultPermissions": {
         "ADMINISTRATOR": { "canRead": true, "canWrite": true },
         "USER": { "canRead": true, "canWrite": false }

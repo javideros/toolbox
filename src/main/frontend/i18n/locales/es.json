@@ -19,7 +19,16 @@
   },
   "breadcrumb": {
     "dashboard": "Panel de Control",
-    "taskList": "Lista de Tareas"
+    "taskList": "Lista de Tareas",
+    "aiChat": "Chat IA"
+  },
+  "ai": {
+    "title": "Asistente IA",
+    "description": "Chatea con IA sobre tu código y desarrollo",
+    "analyzeProject": "Analizar Proyecto",
+    "placeholder": "Pregunta sobre tu código, arquitectura o mejores prácticas...",
+    "startConversation": "Inicia una conversación con Asistente IA",
+    "askAbout": "Pregunta sobre código, arquitectura o mejores prácticas del framework"
   },
   "tasks": {
     "title": "Lista de Tareas",

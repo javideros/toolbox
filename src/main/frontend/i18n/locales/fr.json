@@ -19,7 +19,16 @@
   },
   "breadcrumb": {
     "dashboard": "Tableau de Bord",
-    "taskList": "Liste des Tâches"
+    "taskList": "Liste des Tâches",
+    "aiChat": "Chat IA"
+  },
+  "ai": {
+    "title": "Assistant IA",
+    "description": "Chattez avec l'IA sur votre code et développement",
+    "analyzeProject": "Analyser le Projet",
+    "placeholder": "Demandez sur votre code, architecture ou meilleures pratiques...",
+    "startConversation": "Commencez une conversation avec l'Assistant IA",
+    "askAbout": "Posez des questions sur le code, l'architecture ou les meilleures pratiques"
   },
   "tasks": {
     "title": "Liste des Tâches",
