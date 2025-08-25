@@ -88,7 +88,7 @@
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-anthropic-spring-boot-starter</artifactId>
-            <version>1.0.0-M3</version>
+            <version>1.0.0-M5</version>
         </dependency>
         <!-- Azure OpenAI - Commented out to prevent startup issues
         <dependency>
